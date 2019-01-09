@@ -1,21 +1,35 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import Home from './components/Home'
+import List from './components/List';
+import {AppLoading} from 'expo' ;
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
-    );
-  }
-}
+    constructor(props) {
+        super(props);
+        this.state={
+            loading:true  //加载字体的开关
+        }
+    }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    //异步加载字体
+    async componentWillMount() {
+        await Expo.Font.loadAsync({
+            'Roboto': require('./Fonts/Roboto.ttf'),
+            'Roboto_medium': require('./Fonts/Roboto_medium.ttf'),
+        });
+        this.setState({
+            loading:false
+        })
+    }
+
+    render() {
+        if(this.state.loading){
+            return(
+                <AppLoading/>
+            )
+        }
+        return (
+            <List/>
+        );
+    }
+}
