@@ -675,6 +675,13 @@
   resolved "http://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.119.tgz#be847e5f4bc3e35e46d041c394ead8b603ad8b39"
   integrity sha1-voR+X0vD415G0EHDlOrYtgOtizk=
 
+"@types/moment@^2.13.0":
+  version "2.13.0"
+  resolved "http://registry.npm.taobao.org/@types/moment/download/@types/moment-2.13.0.tgz#604ebd189bc3bc34a1548689404e61a2a4aac896"
+  integrity sha1-YE69GJvDvDShVIaJQE5hoqSqyJY=
+  dependencies:
+    moment "*"
+
 "@types/qs@^6.5.1":
   version "6.5.1"
   resolved "http://registry.npm.taobao.org/@types/qs/download/@types/qs-6.5.1.tgz#a38f69c62528d56ba7bd1f91335a8004988d72f7"
@@ -3889,7 +3896,7 @@ moment-timezone@^0.5.23:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.22.2:
+moment@*, "moment@>= 2.9.0", moment@^2.22.2, moment@^2.23.0:
   version "2.23.0"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
   integrity sha1-dZ6kkayX1UusWtd2mW4qWMwbwiU=
@@ -4538,6 +4545,13 @@ react-native-easy-grid@0.2.0:
   dependencies:
     lodash "^4.11.1"
 
+react-native-fit-image@^1.5.4:
+  version "1.5.4"
+  resolved "http://registry.npm.taobao.org/react-native-fit-image/download/react-native-fit-image-1.5.4.tgz#73d2fccc7ad902cf2ffcd008a2a74749ad50134a"
+  integrity sha1-c9L8zHrZAs8v/NAIoqdHSa1QE0o=
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-gesture-handler@1.0.12:
   version "1.0.12"
   resolved "http://registry.npm.taobao.org/react-native-gesture-handler/download/react-native-gesture-handler-1.0.12.tgz#99a22f90212df299245357dbd3a9a01c788f310b"
@@ -4589,6 +4603,11 @@ react-native-svg@8.0.10:
     color "^2.0.1"
     lodash "^4.16.6"
     pegjs "^0.10.0"
+
+react-native-timeago@^0.4.0:
+  version "0.4.0"
+  resolved "http://registry.npm.taobao.org/react-native-timeago/download/react-native-timeago-0.4.0.tgz#653b3a11217a3c6a331de99f9d614b3e58faf523"
+  integrity sha1-ZTs6ESF6PGozHemfnWFLPlj69SM=
 
 react-native-vector-icons@6.0.0:
   version "6.0.0"

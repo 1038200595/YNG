@@ -1,6 +1,50 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, Dimensions, Image, ActivityIndicator } from 'react-native';
 import { getAllFlatListData, getPageFlatListData } from '../services/FlatListDataService';
+import {  Card, CardItem, Thumbnail, Button, Icon, Left, Body } from 'native-base';
+import TimeAgo from 'react-native-timeago';
+import FitImage from "react-native-fit-image";
+let moment = require("moment"); 
+require("moment/locale/zh-cn");
+moment.locale("zh-cn");
+
+//子组件--卡片
+class FlatListItem extends React.Component{
+    render(){
+        const { name, img, text, time, stars } = this.props.item;
+        return(
+            <Card style={{ flex: 0 }}>
+                <CardItem>
+                    <Left>
+                        <Thumbnail source={{ uri: img }} />
+                        <Body>
+                            <Text>{name}</Text>
+                            <Text note><TimeAgo time={time}/></Text>
+                        </Body>
+                    </Left>
+                </CardItem>
+                <CardItem>
+                    <FitImage source={{ uri: img }} resizeMode="cover" style={styles.fitImage} />
+                </CardItem>
+                <CardItem>
+                    <Body>
+                        <Text numberOfLines={3}>
+                            {text}
+                        </Text>
+                    </Body>
+                </CardItem>
+                <CardItem>
+                    <Left>
+                        <Button transparent textStyle={{ color: '#87838B' }}>
+                            <Icon name="logo-github" />
+                            <Text> {stars.number} stars</Text>
+                        </Button>
+                    </Left>
+                </CardItem>
+            </Card>
+        )
+    }
+}
 
 export default class List extends React.Component {
 
@@ -22,7 +66,7 @@ export default class List extends React.Component {
         })
 
         //延时请求
-        setTimeout(() => {
+        // setTimeout(() => {
             getPageFlatListData({ page: this.state.page }).then(data => {   //异步函数
                 this.setState({
                     flatListDataFromServer: [...this.state.flatListDataFromServer, ...data],
@@ -30,7 +74,7 @@ export default class List extends React.Component {
                     loading: false
                 })
             })
-        }, 2000);
+        // }, 1000);
     }
 
     componentDidMount() {
@@ -89,17 +133,9 @@ export default class List extends React.Component {
                     ListFooterComponent={this.renderFooter}
                     onEndReached={this.loadMoreHandler}
                     onEndReachedThreshold={0.1}
-                    renderItem={({ item, index }) =>
-                        <View>
-                            <Text>{index}</Text>
-                            <Text>id:{item.id}</Text>
-                            <Text style={{ fontSize: 40 }}>{item.name}</Text>
-                            <Image source={{ uri: item.img }} style={{ width: Dimensions.get('window').width, height: 200 }} />
-                            <Text numberOfLines={2}>{item.text}</Text>
-                            <Text>{item.time}</Text>
-                            <Text>{item.stars.number}</Text>
-                        </View>
-                    }
+                    renderItem={({ item, index }) =>{
+                        return <FlatListItem item={item} index={index}/>
+                    }}
                 />
             </View>
         );
@@ -109,8 +145,16 @@ export default class List extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: 5,
         backgroundColor: '#fff',
         justifyContent: 'center',
     },
+    fitImage: {
+        borderRadius: 20,
+    },
+    fitImageWithSize: {
+        height: 100,
+        width: 30,
+    }
 });
+
