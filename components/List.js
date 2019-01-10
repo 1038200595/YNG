@@ -66,7 +66,7 @@ export default class List extends React.Component {
         })
 
         //延时请求
-        // setTimeout(() => {
+        setTimeout(() => {
             getPageFlatListData({ page: this.state.page }).then(data => {   //异步函数
                 this.setState({
                     flatListDataFromServer: [...this.state.flatListDataFromServer, ...data],
@@ -74,7 +74,7 @@ export default class List extends React.Component {
                     loading: false
                 })
             })
-        // }, 1000);
+        }, 1000);
     }
 
     componentDidMount() {
