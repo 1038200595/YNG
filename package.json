@@ -7,9 +7,11 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@ant-design/react-native": "^3.0.5",
     "@expo/vector-icons": "^9.0.0",
     "@types/moment": "^2.13.0",
     "@types/react-native-vector-icons": "^4.6.4",
+    "axios": "^0.18.0",
     "expo": "^32.0.0",
     "moment": "^2.23.0",
     "native-base": "^2.10.0",
@@ -18,7 +20,11 @@
     "react-native-fit-image": "^1.5.4",
     "react-native-router-flux": "^4.0.6",
     "react-native-timeago": "^0.4.0",
-    "react-native-vector-icons": "^6.1.0"
+    "react-native-vector-icons": "^6.1.0",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"

@@ -11,12 +11,13 @@ moment.locale("zh-cn");
 //子组件--卡片
 class FlatListItem extends React.Component{
     render(){
-        const { name, img, text, time, stars } = this.props.item;
+        const { name, img, text, stars,time,head } = this.props.item;
+
         return(
             <Card style={{ flex: 0 }}>
                 <CardItem>
                     <Left>
-                        <Thumbnail source={{ uri: img }} />
+                        <Thumbnail source={{ uri: head }} />
                         <Body>
                             <Text>{name}</Text>
                             <Text note><TimeAgo time={time}/></Text>
@@ -37,7 +38,7 @@ class FlatListItem extends React.Component{
                     <Left>
                         <Button transparent textStyle={{ color: '#87838B' }}>
                             <Icon name="logo-github" />
-                            <Text> {stars.number} stars</Text>
+                            <Text> {eval("(" + stars + ")").number} stars</Text>
                         </Button>
                     </Left>
                 </CardItem>
@@ -47,14 +48,13 @@ class FlatListItem extends React.Component{
 }
 
 export default class List extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
             flatListDataFromServer: [],
             page: 1,
             isLoadMore: false,  //判断否还有数据需要请求，用于控制页码增加
-            loading: false   //判断否还有数据需要请求，用于控制加载
+            noMore:false//判断否还有数据需要请求，用于控制加载
         }
     }
 
@@ -68,10 +68,14 @@ export default class List extends React.Component {
         //延时请求
         setTimeout(() => {
             getPageFlatListData({ page: this.state.page }).then(data => {   //异步函数
+                if(data.length==0){
+                    this.setState({
+                        noMore:true
+                    })
+                }
                 this.setState({
                     flatListDataFromServer: [...this.state.flatListDataFromServer, ...data],
-                    isLoadMore: false,
-                    loading: false
+                    isLoadMore: false
                 })
             })
         }, 1000);
@@ -95,7 +99,7 @@ export default class List extends React.Component {
     }
 
     //key
-    _keyExtractor = (item, index) => item.id.toString();
+    _keyExtractor = (item, index) => item._id.toString();
 
     //头部组件
     renderHeader = () => {
@@ -108,7 +112,11 @@ export default class List extends React.Component {
 
     // 底部组件--加载器
     renderFooter = () => {
-        if (this.state.loading) return null;
+        if (this.state.noMore){
+            return <View>
+                <Image source={require('../assets/noMore.png')} style={{width:Dimensions.get('window').width,height:100,resizeMode: 'stretch'}}/>
+            </View>;
+        } 
         return (
             <View
                 style={{

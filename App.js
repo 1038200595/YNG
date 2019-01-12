@@ -1,45 +1,14 @@
 import React from 'react';
-import Home from './components/Home'
 import List from './components/List';
-import HomeScene from './components/HomeScene';
-import DetailsScene from "./components/DetailsScene";
-import SettingsScene from "./components/SettingsScene";
-import SettingsDetailsScene from "./components/SettingsDetailsScene";
+import Home from "./components/Home";
 import TabIcon from './components/Tabicon';
+import Cart from './components/Cart';
+import My from './components/My';
 import {AppLoading} from 'expo' ;
 import {View,Text,Image,Dimensions}from 'react-native';
 import {Router,Stack,Scene,Tabs} from 'react-native-router-flux';
-
-const HomeNavBar=(props)=>{
-    return(
-        <View style={{
-            height:80,
-            backgroundColor:'transparent',
-            justifyContent:'center',
-            alignItems:'center',
-            paddingTop:20
-        }}>
-            <Image 
-                source={require('./assets/bg.jpg')} 
-                style={{
-                    height:80,
-                    width:Dimensions.get('window').width,
-                    position:'absolute'}}
-                />
-            <Text style={{color:'#000',fontWeight:'bold'}}>
-                首页
-            </Text>
-        </View>
-    )
-}
-
-const RightButton=props=>{
-    return(
-        <View>
-            <Text onPress={()=>{props._increase()}}>右边按钮</Text>
-        </View>
-    )
-}
+import { Provider } from 'react-redux'
+import store from './store'
 
 export default class App extends React.Component {
     constructor(props) {
@@ -66,51 +35,46 @@ export default class App extends React.Component {
                 <AppLoading/>
             )
         }
+        
         return (
-            <Router>
-                <Tabs key="tabbar" activeBackgroundColor='#e5e5e5' inactiveBackgroundColor="white">
-                    <Stack key="root" navigationBarStyle={{ backgroundColor: 'pink' }} title="首页" icon={TabIcon} iconName="home">
-                        <Scene 
-                            key="home" 
-                            component={HomeScene} 
-                            title="首页" initial 
-                            navBar={HomeNavBar}
-                        />
-                        <Scene 
-                            key="details" 
-                            component={DetailsScene} 
-                            title="详情页" 
-                            back={true}
-                            backTitle="返回标题"
-                            backButtonTintColor='red'
-                            backButtonTextStyle={{fontSize:30,color:'yellow'}}
-                            navBarButtonColor="blue"
-                            titleStyle={{color:'orange',fontSize:40}}
-                            navigationBarStyle={{backgroundColor:'gray'}}
-                            renderRightButton={RightButton}
-                        />
-                    </Stack>
-                    <Stack key="settings" title="设置页" icon={TabIcon} iconName="cog">
-                        <Scene 
-                            key="settings" 
-                            component={SettingsScene} 
-                            title="设置页" initial 
-                        />
-                        <Scene 
-                            key="settingsdetails" 
-                            component={SettingsDetailsScene} 
-                            title="设置详情页" 
-                        />
-                    </Stack>
-                    <Stack key="product" title="产品页" icon={TabIcon} iconName="cog">
-                        <Scene
-                        key="product"
-                        component={List}
-                        title="产品列表" initial
-                    />
-                    </Stack>
-                </Tabs>
-            </Router>
+            <Provider store={store}>
+                <Router>
+                    <Tabs key="tabbar" activeTintColor="#1E90FF" inactiveTintColor="#C0C0C0"   >
+                        <Stack key="root" title="商城" icon={TabIcon} iconName="home">
+                            <Scene
+                                key="home"
+                                component={Home}
+                                initial
+                                hideNavBar={true}
+                            />
+                        </Stack>
+                        <Stack key="member" title="会员" icon={TabIcon} iconName="anchor">
+                            <Scene
+                                key="member"
+                                component={List}
+                                initial
+                                hideNavBar={true}
+                            />
+                        </Stack>
+                        <Stack key="cart" title="购物车" icon={TabIcon} iconName="shopping-cart">
+                            <Scene
+                                key="cart"
+                                component={Cart}
+                                initial
+                                hideNavBar={true}
+                            />
+                        </Stack>
+                        <Stack key="my" title="我的" icon={TabIcon} iconName="user">
+                            <Scene
+                                key="my"
+                                component={My}
+                                initial
+                                hideNavBar={true}
+                            />
+                        </Stack>
+                    </Tabs>
+                </Router>
+            </Provider>
         );
     }
 }
