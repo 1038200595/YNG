@@ -2,8 +2,17 @@ import React, { Component } from 'react';
 import { Container, Header } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { Text, View, Image, Dimensions, ScrollView, StyleSheet } from 'react-native';
-import { getPageAdvertisement } from "../services/FlatListDataService";
-export default class GoodThings extends Component {
+import { connect } from "react-redux";
+import { fetchList } from "../actions/";
+
+const mapStateToProps = (state) => {
+  return {
+     lists:state.goods
+  }
+}
+
+
+class GoodThings extends Component {
 
     showGoodThings(j){
         var jsx = [];
@@ -11,7 +20,7 @@ export default class GoodThings extends Component {
             jsx.push(
                 <View key={j}>
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
-                        <Text style={{ fontSize: 10, lineHeight: 14 }}>R17|立减￥300</Text>
+                        <Text style={{ fontSize: 10, lineHeight: 14 }} columnNum={1}>R17|立减￥300</Text>
                         <Text style={{ fontSize: 8 }}>￥2799</Text>
                         <Text style={{ fontSize: 7, textDecorationLine: 'line-through', color: '#ababab' }} >2999</Text>
                     </View>
@@ -22,9 +31,14 @@ export default class GoodThings extends Component {
         return jsx;   
     }
 
-        render() {
-            return (<Container>
-                <Image source={require('../assets/好物推荐.png')} style={{ width: Dimensions.get('window').width, height: 40, resizeMode: 'stretch' }} />
+    render() {
+        if(this.props.lists<1){
+            return null;
+        }
+        const list = this.props.lists;
+        console.log(list, '?????????????????????????')
+        return (<Container style={{height:240}}>
+                <Image source={require('../assets/goods.png')} style={{ width: Dimensions.get('window').width, height: 40, resizeMode: 'stretch' }} />
                 <Grid>
                     <Col style={{ backgroundColor: 'white', height: 200, width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
@@ -56,7 +70,6 @@ export default class GoodThings extends Component {
     }
 }
 
-
 const styles = StyleSheet.create({
     commonView:{
         backgroundColor: 'white', height: 100, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 5
@@ -69,3 +82,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white', height: 100, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 5, borderBottomColor: '#efefef', borderBottomWidth: 0.3
     }
 });
+
+
+
+const CounterContainer = connect(mapStateToProps, { fetchList })(GoodThings);
+export default CounterContainer;

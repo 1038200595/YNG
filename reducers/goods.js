@@ -1,7 +1,7 @@
-function goods(state = { lists: [] }, action) {
+function goods(state = [], action) {
     switch (action.type) {
         case "GETLISTS":
-            return { ...state, lists: action.payload };
+            return [ ...state, ...action.payload.limit ];
         default:
             return state;
     }

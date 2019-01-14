@@ -7,8 +7,7 @@ import { urlPrefix } from '../constant/constant';
 
 // const apiGetAllFlatListData=urlPrefix+`people/list?_sort=id&_order=desc`;
 const apiGetAllFlatListData=urlPrefix+`people/list`;
-const apiGetAllAdvertisement=urlPrefix+`goods/list`;
-const apiGetAllAdvertisementSort=urlPrefix+`goods/list?_sort=id&_order=desc`;
+const apiGetAllAdvertisement=urlPrefix+`goods/list?_sort=id&_order=desc`;
 
 /* 根据id倒序 */
 export const getAllFlatListData= async ()=>{
@@ -44,24 +43,6 @@ export const getPageFlatListData = async(params={page:1})=>{
 export const getPageAdvertisement = async(params={page:1})=>{
     try {
         let response = await fetch(apiGetAllAdvertisement, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-          },
-          body: `limit=9&page=${params.page}`
-        });
-        let responseData = await response.json();
-        return responseData.limit;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-/* 限制长度，每页3条 */
-export const getPageAdvertisementSort = async(params={page:1})=>{
-    try {
-        let response = await fetch(apiGetAllAdvertisementSort, {
           method: "POST",
           credentials: "include",
           headers: {

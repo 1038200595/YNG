@@ -1,6 +1,7 @@
 import React from 'react';
 import List from './components/List';
 import Home from "./components/Home";
+import Details from "./components/Details";
 import TabIcon from './components/Tabicon';
 import Cart from './components/Cart';
 import My from './components/My';
@@ -41,36 +42,17 @@ export default class App extends React.Component {
                 <Router>
                     <Tabs key="tabbar" activeTintColor="#1E90FF" inactiveTintColor="#C0C0C0"   >
                         <Stack key="root" title="商城" icon={TabIcon} iconName="home">
-                            <Scene
-                                key="home"
-                                component={Home}
-                                initial
-                                hideNavBar={true}
-                            />
+                            <Scene key="home" component={Home} initial hideNavBar={true}/>
+                            <Scene key="details" component={Details}  hideNavBar={true}/>
                         </Stack>
                         <Stack key="member" title="会员" icon={TabIcon} iconName="anchor">
-                            <Scene
-                                key="member"
-                                component={List}
-                                initial
-                                hideNavBar={true}
-                            />
+                            <Scene key="member" component={List} initial hideNavBar={true}/>
                         </Stack>
                         <Stack key="cart" title="购物车" icon={TabIcon} iconName="shopping-cart">
-                            <Scene
-                                key="cart"
-                                component={Cart}
-                                initial
-                                hideNavBar={true}
-                            />
+                            <Scene key="cart" component={Cart} initial hideNavBar={true} />
                         </Stack>
                         <Stack key="my" title="我的" icon={TabIcon} iconName="user">
-                            <Scene
-                                key="my"
-                                component={My}
-                                initial
-                                hideNavBar={true}
-                            />
+                            <Scene key="my" component={My} initial hideNavBar={true}/>
                         </Stack>
                     </Tabs>
                 </Router>

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, Dimensions,ScrollView } from 'react-native';
 import { Carousel, Grid, WhiteSpace } from '@ant-design/react-native';
+import { getPageAdvertisement, getPageAdvertisementSort } from "../services/FlatListDataService";
 import GoodThings from "./GoodThings";
+import HomeLists from "./HomeLists";
 import { connect } from 'react-redux';
 import { fetchList } from '../actions';
-import HomeLists from "./HomeLists";
 
 const mapStateToProps = (state) => {
   return {
-     lists:state.goods
+    lists: state.goods.lists
   }
 }
 
@@ -38,31 +39,50 @@ const data=[
   }
 ]
 
-var k=8;  //轮播广告需要进行遍历数组arr[0]-arr[8]
+var k=8; 
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            AdvertiseDataFromServer: [],
             page: 1,
+            isLoadMore: false,
         }
     }
 
+    //数据请求获取列表
+    makeAdverRequest = () => {
+        this.setState({
+            isLoadMore: true,
+        })
+        getPageAdvertisementSort({ page: this.state.page }).then(data => {   //异步函数
+            this.setState({
+                AdvertiseDataFromServer: data,
+                isLoadMore: false
+            })
+        })
+    }
+
+    componentWillMount() {
+        this.makeAdverRequest();
+    }
 
     componentDidMount(){
-        this.props.fetchList();
+    //   this.props.fetchList();
     }
     
-    advertise(list){
-        if(list.length>0){
-            const arr = list;
-            var views = [];
-            for (let i = 1; i <= 3; i++) {
-                var imgs = arr[k].img;
-                var titles = arr[k].title;
-                var prices = arr[k].price;
-                var oldprices = arr[k].oldprice;
-                k -= 1;
+    //----------------------------------通过状态获取数据列表进行渲染------------------------------------------------
+    advertise(){
+        const arr = this.state.AdvertiseDataFromServer;
+        var views=[];
+        if (!this.state.isLoadMore){
+            for(let i=1;i<=3;i++){
+                var imgs=arr[k].img;
+                var titles=arr[k].title;
+                var prices=arr[k].price;
+                var oldprices=arr[i].oldprice;
+                k-=1;
                 views.push(<View key={i} style={{ width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                     <Image source={{ uri: imgs }} style={{ width: 100, height: 100 }} />
                     <Text style={{ fontSize: 12, color: '#3C3C3C' }} numberOfLines={1}>{titles}</Text>
@@ -71,15 +91,14 @@ class Home extends React.Component {
                         <Text style={{ fontSize: 10, textDecorationLine: 'line-through', color: '#ababab', marginTop: 2 }} >{oldprices}</Text>
                     </View>
                 </View>
-                )
-            }
-            return views;
+            )}
         }
+        return views;
     }
 
-    advertisements(list){
+    advertisements(){
         var jsx = [];
-        for (let i = 0; i < 3; i++) {
+        for(let i=0;i<3;i++){
             jsx.push(
                 <View style={[styles.containerHorizontal]} key={i}>
                     <View >
@@ -88,23 +107,22 @@ class Home extends React.Component {
                             <Text>抢购中:</Text>
                             <Text>04:38:13</Text>
                         </View>
-                        <View style={{ width: Dimensions.get('window').width, display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                            {this.advertise(list)}
+                        <View style={{ width: Dimensions.get('window').width, display: 'flex', flexDirection: 'row', justifyContent:'space-evenly' }}>
+                            {this.advertise()}
                         </View>
                     </View>
                 </View>
             )
         }
-        return jsx;
+        return jsx;   
     }
 
     
 
     render() {
-        const list=this.props.lists;
         return (
-            <ScrollView style={{ backgroundColor: '#F5F5F5' }}>
-                {/* 轮播图 */}
+            <ScrollView style={{ backgroundColor:'#F5F5F5'}}>
+            {/* 轮播图 */}
                 <View>
                     <Carousel
                         style={styles.wrapper}
@@ -113,34 +131,34 @@ class Home extends React.Component {
                         infinite
                     >
                         <Image style={[styles.containerHorizontal]}
-                            source={{ uri: 'http:////m.360buyimg.com/mobilecms/s750x366_jfs/t1/28138/18/4527/302420/5c32f69fEc6341c13/fcea089ac6c91bdf.jpg!cr_1125x549_0_72!q70.jpg.dpg' }}
+                            source={{ uri:'http:////m.360buyimg.com/mobilecms/s750x366_jfs/t1/28138/18/4527/302420/5c32f69fEc6341c13/fcea089ac6c91bdf.jpg!cr_1125x549_0_72!q70.jpg.dpg'}}
                         />
                         <Image style={[styles.containerHorizontal]}
-                            source={{ uri: 'https://m.360buyimg.com/mobilecms/s750x366_jfs/t1/10749/22/8472/186042/5c36b304Ece1b0656/aef930ae4b21159e.jpg!cr_1125x549_0_72!q70.jpg.dpg' }}
+                            source={{ uri:'https://m.360buyimg.com/mobilecms/s750x366_jfs/t1/10749/22/8472/186042/5c36b304Ece1b0656/aef930ae4b21159e.jpg!cr_1125x549_0_72!q70.jpg.dpg'}}
                         />
                         <Image style={[styles.containerHorizontal]}
-                            source={{ uri: 'https://m.360buyimg.com/mobilecms/s750x366_jfs/t1/28752/2/4494/86961/5c32cb28E19e17f6e/30266e2eb2cd106f.jpg!cr_1125x549_0_72!q70.jpg.dpg' }}
+                            source={{ uri:'https://m.360buyimg.com/mobilecms/s750x366_jfs/t1/28752/2/4494/86961/5c32cb28E19e17f6e/30266e2eb2cd106f.jpg!cr_1125x549_0_72!q70.jpg.dpg'}}
                         />
                         <Image style={[styles.containerHorizontal]}
-                            source={{ uri: 'https://m.360buyimg.com/mobilecms/s750x366_jfs/t1/29458/1/4704/279267/5c35498aEbb9e4023/a89f5649427cfb04.jpg!cr_1125x549_0_72!q70.jpg.dpg' }}
+                            source={{ uri:'https://m.360buyimg.com/mobilecms/s750x366_jfs/t1/29458/1/4704/279267/5c35498aEbb9e4023/a89f5649427cfb04.jpg!cr_1125x549_0_72!q70.jpg.dpg'}}
                         />
                         <Image style={[styles.containerHorizontal]}
-                            source={{ uri: 'https://m.360buyimg.com/mobilecms/s750x366_jfs/t1/28137/25/4604/168135/5c33ff56Ed407e22d/3988bacddcabf68b.jpg!cr_1125x549_0_72!q70.jpg.dpg' }}
+                            source={{ uri:'https://m.360buyimg.com/mobilecms/s750x366_jfs/t1/28137/25/4604/168135/5c33ff56Ed407e22d/3988bacddcabf68b.jpg!cr_1125x549_0_72!q70.jpg.dpg'}}
                         />
                     </Carousel>
                 </View>
 
-                {/* 十个icon列表 */}
+            {/* 十个icon列表 */}
                 <ScrollView style={styles.wrapper}>
                     <View style={[{ padding: 10 }]}>
-                        <Grid data={data} hasLine={false} columnNum={5} />
-                    </View>
+                        <Grid data={data} hasLine={false} columnNum={5}/>
+                    </View>                    
                 </ScrollView>
                 <WhiteSpace size="sm" />
 
-                {/* 轮播广告 */}
+            {/* 轮播广告 */}
                 <View>
-                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 15, width: Dimensions.get('window').width, backgroundColor: 'white', borderBottomColor: '#efefef', borderBottomWidth: 1 }}>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding: 15, width: Dimensions.get('window').width, backgroundColor: 'white', borderBottomColor:'#efefef',borderBottomWidth:1}}>
                         <View style={{ display: 'flex', flexDirection: 'row' }}>
                             <View>
                                 <Text style={{ color: 'black', fontSize: 16 }}>由你<Text style={{ color: 'red' }}>秒</Text>杀</Text>
@@ -158,27 +176,27 @@ class Home extends React.Component {
                             </View>
                         </View>
                     </View>
-
-                    <Carousel style={{ backgroundColor: '#fff', height: 200 }} selectedIndex={2} selectedIndex={2} autoplay infinite autoplay={false} dotStyle={{ width: 5, height: 5 }}>
-                        {this.advertisements(list)}
+                    
+                    <Carousel style={{ backgroundColor: '#fff', height: 200 }} selectedIndex={2} infinite autoplay={false} dotStyle={{ width: 5, height: 5 }}>
+                        {this.advertisements()}
                     </Carousel>
                 </View>
-                <WhiteSpace size="sm" />
+                
 
-                {/* 好物推荐 */}
+            {/* 好物推荐 */}
                 <WhiteSpace size="sm" />
-                <GoodThings />
+                <GoodThings/>
 
-                {/* 精选活动及其他列表 */}
+            {/* 精选活动及其他列表 */}
                 <WhiteSpace size="sm" />
-                <HomeLists />
+                <HomeLists/>
 
-                <Image source={require('../assets/backTop.png')} style={{ width: 35, height: 35, position: 'absolute', right: 25, bottom: 30 }} />
+            <Image source={require('../assets/backTop.png')} style={{width:35,height:35,position:'absolute',right:25,bottom:30}}/>
             </ScrollView>
         );
-        
     }
 }
+
 const styles = StyleSheet.create({
     wrapper: {
         backgroundColor: '#fff',
@@ -188,7 +206,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         height: 170,
-        width: Dimensions.get('window').width,
+        width: Dimensions.get('window').width, 
         resizeMode: 'stretch'
     },
     text: {
@@ -199,4 +217,4 @@ const styles = StyleSheet.create({
 
 
 const CounterContainer = connect(mapStateToProps, {fetchList})(Home);
-export default CounterContainer;
+// export default CounterContainer;
