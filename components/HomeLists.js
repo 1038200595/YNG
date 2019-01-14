@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { WhiteSpace } from "@ant-design/react-native";
 import { Actions } from "react-native-router-flux";
+var _ = require("lodash");
 
 const mapStateToProps = (state) => {
     return {
-        lists: state.goods.lists
+        lists: state.goods
     }
 }
 
@@ -27,21 +28,21 @@ class HomeLists extends React.Component {
         }
     }
 
-
-    showHomeLists() {
+    showHomeLists(list) {
         var jsx = [];
         for (let i = 0; i < 9; i++) {
+            var obj = list[_.random(0, list.length-1)];    //每行分类随机加载数据
             jsx.push(
                 <Row style={[styles.commonViewBorder]} key={i}>
-                    <TouchableOpacity onPress={()=>{
+                    <TouchableOpacity onPress={() => {
                         Actions.details();
                     }}>
-                        <Image source={{ uri: 'https://img30.360buyimg.com/mobilecms/s200x200_jfs/t1/26954/5/4765/128988/5c35bcccE16a1b2f3/e8c60762200795ed.jpg!q70.dpg' }} style={{ width: 70, height: 70, marginTop: -10 }} />
+                        <Image source={{ uri: obj.img }} style={{ width: 70, height: 70, marginTop: -10 }} />
                         <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                            <Text style={{ fontSize: 10, lineHeight: 14 }} columnNum={2}>R17|立减￥300</Text>
+                            <Text style={{ fontSize: 10, lineHeight: 14 }} numberOfLines={1}>{obj.title}</Text>
                             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                <Text style={{ fontSize: 8, marginRight: 3 }}>￥2799</Text>
-                                <Text style={{ fontSize: 7, textDecorationLine: 'line-through', color: '#ababab', marginTop: 1 }} >2999</Text>
+                                <Text style={{ fontSize: 8, marginRight: 3 }}>￥{obj.price}</Text>
+                                <Text style={{ fontSize: 7, textDecorationLine: 'line-through', color: '#ababab', marginTop: 1 }} >{obj.oldprice}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -52,7 +53,7 @@ class HomeLists extends React.Component {
     }
 
 
-    showALLLists() {
+    showALLLists(list) {
         var jsxs = [];
         for (let i = 0; i < 16; i+=2) {
             jsxs.push(
@@ -62,7 +63,7 @@ class HomeLists extends React.Component {
                         <Image source={this.state.data[i]} style={{ width: Dimensions.get('window').width, height: 40, resizeMode: 'stretch' }} />
                         <Image source={this.state.data[i+1]} style={{ width: Dimensions.get('window').width, height: 100, resizeMode: 'stretch' }} />
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                            {this.showHomeLists()}
+                            {this.showHomeLists(list)}
                         </ScrollView>
                     </View>
                 </View>
@@ -72,7 +73,11 @@ class HomeLists extends React.Component {
     }
 
     render() {
-        return this.showALLLists()
+        if (this.props.lists < 1) {
+            return null;
+        }
+        const list = this.props.lists;
+        return this.showALLLists(list);
     }
 }
 

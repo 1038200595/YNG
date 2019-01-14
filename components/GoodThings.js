@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Header } from 'native-base';
+import { Container } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
-import { Text, View, Image, Dimensions, ScrollView, StyleSheet } from 'react-native';
+import { Text, View, Image, Dimensions, StyleSheet,TouchableOpacity} from 'react-native';
 import { connect } from "react-redux";
-import { fetchList } from "../actions/";
+import { Actions } from "react-native-router-flux";
 
 const mapStateToProps = (state) => {
   return {
@@ -18,14 +18,14 @@ class GoodThings extends Component {
         var jsx = [];
         for (let i = 0; i < 1; i++) {
             jsx.push(
-                <View key={j}>
+                <TouchableOpacity onPress={() => {Actions.details();}} key={j} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
-                        <Text style={{ fontSize: 10, lineHeight: 14 }} columnNum={1}>R17|立减￥300</Text>
-                        <Text style={{ fontSize: 8 }}>￥2799</Text>
-                        <Text style={{ fontSize: 7, textDecorationLine: 'line-through', color: '#ababab' }} >2999</Text>
+                        <Text style={{ fontSize: 10, lineHeight: 14 }} numberOfLines={1}>{j.title}</Text>
+                        <Text style={{ fontSize: 8 }}>￥{j.price}</Text>
+                        <Text style={{ fontSize: 7, textDecorationLine: 'line-through', color: '#ababab' }} >{j.oldprice}</Text>
                     </View>
-                    <Image source={{ uri: 'https://img30.360buyimg.com/mobilecms/s200x200_jfs/t1/26954/5/4765/128988/5c35bcccE16a1b2f3/e8c60762200795ed.jpg!q70.dpg' }} style={{ width: 60, height: 60, marginTop: -10 }} />
-                </View>
+                    <Image source={{ uri:j.img }} style={{ width: 60, height: 60, marginTop: -10 }} />
+                </TouchableOpacity>
             )
         }
         return jsx;   
@@ -36,32 +36,35 @@ class GoodThings extends Component {
             return null;
         }
         const list = this.props.lists;
-        console.log(list, '?????????????????????????')
         return (<Container style={{height:240}}>
                 <Image source={require('../assets/goods.png')} style={{ width: Dimensions.get('window').width, height: 40, resizeMode: 'stretch' }} />
                 <Grid>
                     <Col style={{ backgroundColor: 'white', height: 200, width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                        <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
-                            <Text>R17|立减￥300</Text>
-                            <Text>￥2799</Text>
-                            <Text style={{ fontSize: 10, textDecorationLine: 'line-through', color: '#ababab', marginTop: 2 }} >2999</Text>
-                        </View>
-                        <Image source={{ uri: 'https://img30.360buyimg.com/mobilecms/s180x180_jfs/t1/18523/31/2784/202890/5c218b6dEb3eb40d8/0660754d1989f14b.jpg!q70.dpg' }} style={{ width: 120, height: 120 }} />
+                        <TouchableOpacity onPress={() => {
+                            Actions.details();
+                        }}>
+                            <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
+                            <Text numberOfLines={1}>{list[4].title}</Text>
+                                <Text>￥{list[4].price}</Text>
+                                <Text style={{ fontSize: 10, textDecorationLine: 'line-through', color: '#ababab', marginTop: 2 }} >{list[4].oldprice}</Text>
+                            </View>
+                            <Image source={{ uri: list[4].img }} style={{ width: 120, height: 120 }} />
+                        </TouchableOpacity>
                     </Col>
                     <Col style={{ height: 200, borderLeftColor: '#efefef', borderRightColor: '#efefef', borderLeftWidth: 0.3, borderRightWidth: 0.3 }}>
                         <Row style={[styles.commonViewBorder]}>
-                            {this.showGoodThings(1)}
+                            {this.showGoodThings(list[5])}
                         </Row>
                         <Row style={[styles.commonView]}>
-                            {this.showGoodThings(2)}
+                            {this.showGoodThings(list[6])}
                         </Row>
                     </Col>
                     <Col style={{ height: 200 }}>
                         <Row style={[styles.commonViewBorder]}>
-                            {this.showGoodThings(3)}
+                        {this.showGoodThings(list[7])}
                         </Row>
                         <Row style={[styles.commonView]}>
-                            {this.showGoodThings(4)}
+                        {this.showGoodThings(list[8])}
                         </Row>
                     </Col>
                 </Grid>
@@ -85,5 +88,7 @@ const styles = StyleSheet.create({
 
 
 
-const CounterContainer = connect(mapStateToProps, { fetchList })(GoodThings);
+
+
+const CounterContainer = connect(mapStateToProps)(GoodThings);
 export default CounterContainer;

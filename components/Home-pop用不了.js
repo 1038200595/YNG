@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions,ScrollView } from 'react-native';
 import { Carousel, Grid, WhiteSpace } from '@ant-design/react-native';
 import GoodThings from "./GoodThings";
 import { connect } from 'react-redux';
 import { fetchList } from '../actions';
 import HomeLists from "./HomeLists";
-import { Actions } from "react-native-router-flux";
 
+import { Button, Modal, WingBlank, Provider, } from '@ant-design/react-native';
 
 const mapStateToProps = (state) => {
   return {
@@ -47,7 +47,14 @@ class Home extends React.Component {
         super(props);
         this.state = {
             page: 1,
+            visible2: false,
         }
+        this.onClose2 = () => {
+            this.setState({
+                visible2: false,
+            });
+        };
+
     }
 
 
@@ -65,19 +72,14 @@ class Home extends React.Component {
                 var prices = arr[k].price;
                 var oldprices = arr[k].oldprice;
                 k -= 1;
-                views.push(
-                    <TouchableOpacity key={i} onPress={() => {
-                        Actions.details();
-                    }}>
-                        <View style={{ width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                            <Image source={{ uri: imgs }} style={{ width: 100, height: 100 }} />
-                            <Text style={{ fontSize: 12, color: '#3C3C3C' }} numberOfLines={1}>{titles}</Text>
-                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                <Text style={{ fontSize: 12, color: '#272727' }} >￥{prices}   </Text>
-                                <Text style={{ fontSize: 10, textDecorationLine: 'line-through', color: '#ababab', marginTop: 2 }} >{oldprices}</Text>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
+                views.push(<View key={i} style={{ width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                    <Image source={{ uri: imgs }} style={{ width: 100, height: 100 }} />
+                    <Text style={{ fontSize: 12, color: '#3C3C3C' }} numberOfLines={1}>{titles}</Text>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 12, color: '#272727' }} >￥{prices}   </Text>
+                        <Text style={{ fontSize: 10, textDecorationLine: 'line-through', color: '#ababab', marginTop: 2 }} >{oldprices}</Text>
+                    </View>
+                </View>
                 )
             }
             return views;
@@ -181,6 +183,32 @@ class Home extends React.Component {
                 <HomeLists />
 
                 <Image source={require('../assets/backTop.png')} style={{ width: 35, height: 35, position: 'absolute', right: 25, bottom: 30 }} />
+
+
+
+                <ScrollView style={{ marginTop: 20 }}>
+                    <WingBlank>
+                        <Button onPress={() => this.setState({ visible2: true })}>
+                            popup
+                        </Button>
+                        <WhiteSpace />
+                    </WingBlank>
+
+                    <Modal
+                        popup
+                        visible={this.state.visible2}
+                        animationType="slide-up"
+                        onClose={this.onClose2}
+                    >
+                        <View style={{ paddingVertical: 20, paddingHorizontal: 20 }}>
+                            <Text style={{ textAlign: 'center' }}>Content...</Text>
+                            <Text style={{ textAlign: 'center' }}>Content...</Text>
+                        </View>
+                        <Button type="primary" onPress={this.onClose2}>
+                            close modal
+                        </Button>
+                    </Modal>
+                </ScrollView>
             </ScrollView>
         );
         
@@ -205,5 +233,17 @@ const styles = StyleSheet.create({
 });
 
 
+
+// export default () => (
+//   <Provider>
+//     <Home />
+//   </Provider>
+// );
+
+
 const CounterContainer = connect(mapStateToProps, {fetchList})(Home);
-export default CounterContainer;
+// export default CounterContainer;
+
+
+
+

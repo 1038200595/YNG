@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions, Image, ActivityIndicator, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Dimensions, Image, ActivityIndicator, ScrollView, Modal } from 'react-native';
 import { getAllFlatListData, getPageFlatListData } from '../services/FlatListDataService';
 import { Card, CardItem, Thumbnail, Button, Left, Body, Icon } from 'native-base';
 import { Carousel, WhiteSpace, List } from "@ant-design/react-native";
+import Dialog, { DialogContent } from 'react-native-popup-dialog';
 
 const Item = List.Item;
 
@@ -12,14 +13,20 @@ export default class Details extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+            modalVisible:false
         }
     }
 
     addCart(){
-        console.log(111)
+        this.setState({
+            modalVisible:true
+        })
     }
-
+    close(){
+        this.setState({
+            modalVisible:false
+        })
+    }
     
     render() {
         return <ScrollView style={styles.container}>
@@ -32,7 +39,7 @@ export default class Details extends React.Component {
                 </Carousel>
               </View>
             </View>
-            <View style={{ padding: 10, backgroundColor: '#fefefe', borderTopColor: '#ccc', borderTopWidth: 2 }}>
+            <View style={{ padding: 10, backgroundColor: '#fefefe', borderTopColor: '#ccc', borderTopWidth: 1 }}>
                 <Text style={{ color: '#00BFFF', fontSize: 24 }}>￥3839.00</Text>
                 <Text style={{ color: '#080808', fontSize: 14 }}>华为 HUAWEI Mate 20 麒麟980AI智能芯片超微距影像超大广角徕卡三摄全网通4G手机</Text>
             </View>
@@ -81,14 +88,34 @@ export default class Details extends React.Component {
                                     <Text style={{ fontSize: 10, marginTop: -20 }}>购物车</Text>
                                 </Button>
                             </View>
-                            <Button style={{ backgroundColor: '#FFA500', width: Dimensions.get('window').width/4, height: 40, fontSize: 20, lineHeight: 40,flex:1,justifyContent: 'center',alignItems:'center'}} onPress={()=>this.addCart()}>
+                            <Button style={{ backgroundColor: '#FFA500', width: Dimensions.get('window').width/4, height: 40, fontSize: 20, lineHeight: 40,flex:1,justifyContent: 'center',alignItems:'center',borderRadius:0}} onPress={()=>this.addCart()}>
                                 <Text style={{color:'white'}}>加入购物车</Text>
                             </Button>
-                            <Button style={{ backgroundColor: '#3399ff', width: Dimensions.get('window').width/4, height: 40, fontSize: 20, lineHeight: 40,flex:1,justifyContent: 'center',alignItems:'center'}}>
+                            <Button style={{ backgroundColor: '#3399ff', width: Dimensions.get('window').width/4, height: 40, fontSize: 20, lineHeight: 40,flex:1,justifyContent: 'center',alignItems:'center',borderRadius:0}}>
                                 <Text style={{color:'white'}}>立即购买</Text>
                             </Button>
                         </View>
                 </List>
+            </View>
+
+
+
+            <View>
+                <Modal animationType={'slide'}
+                    transparent={true}
+                    visible={this.state.modalVisible}
+                    onrequestclose={() => { console.log("onrequestclose"); }}
+                    onShow={() => { console.log("onShow"); }}
+                    supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+                    onOrientationChange={() => { console.log("onOrientationChange"); }}>
+                    <View style={{ height: 400, width: Dimensions.get('window').width, backgroundColor: 'white',position:'absolute',bottom:0 }}>
+                        <View>
+                            <Text>Hello World!</Text>
+                            <View><Button><Text>Hello World!</Text></Button></View>
+                            <Button onPress={() => this.close()}><Text>关闭</Text></Button>
+                        </View>
+                    </View>
+                </Modal>
             </View>
           </ScrollView>
     }
@@ -116,7 +143,7 @@ const styles = StyleSheet.create({
     btn:{
         width:Dimensions.get('window').width/2,
         backgroundColor: 'white', height:40, fontSize: 12, lineHeight: 40,flex:1, justifyContent: 'center', alignItems: 'center',
-        display: 'flex', flexDirection: 'row',marginRight:5
+        display: 'flex', flexDirection: 'row'
     },
     txts:{
         fontSize:12
