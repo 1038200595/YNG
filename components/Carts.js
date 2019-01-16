@@ -4,7 +4,7 @@ import { Stepper} from '@ant-design/react-native';
 import { StyleSheet,Dimensions,TextInput,Image,PixelRatio,ScrollView,FlatList,ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Content, SwipeRow, View, Text, Icon, Button, Title } from 'native-base';
-import { minus, changeCheck, checkAll,remove} from '../actions/index';
+import { minus, changeCheck, checkAll, remove, checkAllDelete} from '../actions/index';
 import {  WhiteSpace } from "@ant-design/react-native";
 import { Dialog, DialogContent } from "react-native-popup-dialog";
 import  Icons from 'react-native-vector-icons/AntDesign';
@@ -74,9 +74,25 @@ class Carts extends React.Component {
 
     /**********************确认删除********************* */
     sure(id) {
-        this.props.remove(id);
+        if(typeof id=='object'){
+            this.props.checkAllDelete(true);
+
+        }else if(typeof id=='string'){
+            this.props.remove(id);
+        }
+        
         this.setState({ visible: false });
     }
+
+    /**********************删除全部********************* */
+    deleteAll(allthings) {
+        this.setState({
+            visible: true,
+            id: allthings
+        })
+    }
+
+
 
     edit(){
         if(this.state.dis=='flex'){
@@ -133,6 +149,8 @@ class Carts extends React.Component {
                     </View>
                 )
             }
+        }else{
+            jsx.push(<Image key={-1} source={{ uri: "http://bpic.588ku.com/element_water_img/18/09/20/02020f3b0fa2b36701d5d9439e674f11.jpg" }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height*0.72 }} />);
         }
         return jsx;
     }
@@ -186,7 +204,7 @@ class Carts extends React.Component {
                                 </View>
                             </View>
                         <Button style={{  width: 100, height: 50, backgroundColor: '#3399ff', lineHeight: 50, fontSize: 20,flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 5,display: this.state.dis}}><Text style={{color:'white',fontSize:11}}>去结算</Text></Button>
-                        <View style={{  width: 100, height: 50, backgroundColor: 'white', lineHeight: 50, fontSize: 20,flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 5,display:this.state.diss}}><Text style={{color:'#EE0000',fontSize:11,borderWidth:0.3,borderColor:'#ee0000',borderRadius:10,padding:3,display:this.state.diss}}> 删　除 </Text></View>
+                        <View style={{  width: 100, height: 50, backgroundColor: 'white', lineHeight: 50, fontSize: 20,flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 5,display:this.state.diss}}><Text style={{color:'#EE0000',fontSize:11,borderWidth:0.3,borderColor:'#ee0000',borderRadius:10,padding:3,display:this.state.diss}} onPress={()=>{this.deleteAll(this.props.carts)}}> 删　除 </Text></View>
                         </View>
                     </View>
 
@@ -238,7 +256,7 @@ const styles = StyleSheet.create({
 
 
 
-export default connect(mapStateToProps, { minus, changeCheck, checkAll, remove })(Carts)
+export default connect(mapStateToProps, { minus, changeCheck, checkAll, remove, checkAllDelete })(Carts)
 
 
 

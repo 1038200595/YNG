@@ -46,6 +46,15 @@ function carts(state = initialState, action) {
                 }
             })
             return [...state];
+        
+        /* ******************删除多个******************** */
+        case "CHECK_ALL_DELETE":
+            var arr;
+            state.forEach((element) => {
+                arr = _.filter(state, back => back.choose == false);
+                state = arr;
+            })
+            return [...state];
 
         default:
             return [...state];
