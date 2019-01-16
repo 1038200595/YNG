@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, ScrollView, TouchableOpacity,TouchableHighlight } from 'react-native';
 import { Carousel, Grid, WhiteSpace } from '@ant-design/react-native';
 import GoodThings from "./GoodThings";
 import { connect } from 'react-redux';
 import { fetchList } from '../actions';
 import HomeLists from "./HomeLists";
 import { Actions } from "react-native-router-flux";
+var _ = require("lodash");
 
 
 const mapStateToProps = (state) => {
@@ -55,38 +56,63 @@ class Home extends React.Component {
         this.props.fetchList();
     }
     
+    // advertise(list){
+    //     if(list.length>0){
+    //         const arr = list;
+    //         var views = [];
+    //         for (let i = 1; i <= 3; i++) {
+    //             var imgs = arr[k].img;
+    //             var titles = arr[k].title;
+    //             var prices = arr[k].price;
+    //             var oldprices = arr[k].oldprice;
+    //             views.push(
+    //                 <TouchableOpacity key={i} onPress={() => {
+    //                     Actions.details(arr[k]);
+    //                 }}>
+    //                     <View style={{ width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+    //                         <Image source={{ uri: imgs }} style={{ width: 100, height: 100 }} />
+    //                         <Text style={{ fontSize: 12, color: '#3C3C3C' }} numberOfLines={1}>{titles}</Text>
+    //                         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+    //                             <Text style={{ fontSize: 12, color: '#272727' }} >￥{prices}   </Text>
+    //                             <Text style={{ fontSize: 10, textDecorationLine: 'line-through', color: '#ababab', marginTop: 2 }} >{oldprices}</Text>
+    //                         </View>
+    //                     </View>
+    //                 </TouchableOpacity>
+    //             )
+    //             k -= 1;
+    //         }
+    //         return views;
+    //     }
+    // }
+    
     advertise(list){
-        if(list.length>0){
-            const arr = list;
-            var views = [];
-            for (let i = 1; i <= 3; i++) {
-                var imgs = arr[k].img;
-                var titles = arr[k].title;
-                var prices = arr[k].price;
-                var oldprices = arr[k].oldprice;
-                k -= 1;
-                views.push(
-                    <TouchableOpacity key={i} onPress={() => {
-                        Actions.details();
-                    }}>
-                        <View style={{ width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                            <Image source={{ uri: imgs }} style={{ width: 100, height: 100 }} />
-                            <Text style={{ fontSize: 12, color: '#3C3C3C' }} numberOfLines={1}>{titles}</Text>
-                            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-                                <Text style={{ fontSize: 12, color: '#272727' }} >￥{prices}   </Text>
-                                <Text style={{ fontSize: 10, textDecorationLine: 'line-through', color: '#ababab', marginTop: 2 }} >{oldprices}</Text>
-                            </View>
+        var views = [];
+        list.map((value, index) => {
+            views.push(
+                <TouchableHighlight key={index} onPress={() => {
+                    Actions.details(value);
+                }}>
+                    <View style={{ width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+                        <Image source={{ uri: value.img }} style={{ width: 100, height: 100 }} />
+                        <Text style={{ fontSize: 12, color: '#3C3C3C' }} numberOfLines={1}>{value.title}</Text>
+                        <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 12, color: '#272727' }} >￥{value.price}   </Text>
+                            <Text style={{ fontSize: 10, textDecorationLine: 'line-through', color: '#ababab', marginTop: 2 }} >{value.oldprice}</Text>
                         </View>
-                    </TouchableOpacity>
-                )
-            }
-            return views;
-        }
+                    </View>
+                </TouchableHighlight>
+            )
+        })
+        return views;
     }
 
     advertisements(list){
+        if(list.length<1){
+            return null;
+        }
+        list = _.chunk(list, 3);
         var jsx = [];
-        for (let i = 0; i < 3; i++) {
+        for (let i = 2; i >= 0; i--) {
             jsx.push(
                 <View style={[styles.containerHorizontal]} key={i}>
                     <View >
@@ -96,7 +122,7 @@ class Home extends React.Component {
                             <Text>04:38:13</Text>
                         </View>
                         <View style={{ width: Dimensions.get('window').width, display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                            {this.advertise(list)}
+                            {this.advertise(list[i])}
                         </View>
                     </View>
                 </View>

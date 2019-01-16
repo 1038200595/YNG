@@ -1,19 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions, Image, ActivityIndicator, ScrollView, Modal } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Dimensions, Image, ActivityIndicator, ScrollView, Modal, TextInput, TouchableHighlight } from 'react-native';
 import { getAllFlatListData, getPageFlatListData } from '../services/FlatListDataService';
 import { Card, CardItem, Thumbnail, Button, Left, Body, Icon } from 'native-base';
 import { Carousel, WhiteSpace, List } from "@ant-design/react-native";
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
+import { connect } from "react-redux";
+import {addCarts} from '../actions/index';
 
 const Item = List.Item;
 
+const mapStateToProps = (state) => {
+    return {
+        goods:state.goods,
+        carts:state.carts
+    }
+}
 
-
-export default class Details extends React.Component {
+class Details extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            modalVisible:false
+            modalVisible:false,
+            value:1
         }
     }
 
@@ -26,22 +34,61 @@ export default class Details extends React.Component {
         this.setState({
             modalVisible:false
         })
+        this.props.addCarts(this.state.value, this.props.navigation.state.params);
+    }
+
+    minus(){
+        if(this.state.value<=1){
+            this.setState({
+                value:1
+            })
+        }else{
+            this.setState({
+                value:this.state.value-1
+            })
+        }
+    }
+    plus(){
+        if(this.state.value>=99){
+            this.setState({
+                value:99
+            })
+        }else{
+            this.setState({
+                value:this.state.value+1
+            })
+        }
+    }
+    changeValue(val){
+        if(val==''||val<=1){
+            val=1
+        }else if(val>=99){
+            val=99
+        }else{
+            val=parseInt(val)
+        }
+        this.setState({
+            value:val
+        })
+        
     }
     
     render() {
+        const {_id,title,content,price,oldprice,img,sailnum}=this.props.navigation.state.params;
+
         return <ScrollView style={styles.container}>
             <View style={{ marginTop: 30 }}>
               <View>
                 <Carousel style={styles.wrapper} selectedIndex={2} autoplay infinite dotStyle={{ width: 5, height: 5 }}>
-                  <Image style={[styles.containerHorizontal]} source={{ uri: "https://img30.360buyimg.com/mobilecms/s200x200_jfs/t1/26954/5/4765/128988/5c35bcccE16a1b2f3/e8c60762200795ed.jpg!q70.dpg" }} />
-                  <Image style={[styles.containerHorizontal]} source={{ uri: "https://img30.360buyimg.com/mobilecms/s200x200_jfs/t1/26954/5/4765/128988/5c35bcccE16a1b2f3/e8c60762200795ed.jpg!q70.dpg" }} />
-                  <Image style={[styles.containerHorizontal]} source={{ uri: "https://img30.360buyimg.com/mobilecms/s200x200_jfs/t1/26954/5/4765/128988/5c35bcccE16a1b2f3/e8c60762200795ed.jpg!q70.dpg" }} />
+                  <Image style={[styles.containerHorizontal]} source={{ uri: img }} />
+                  <Image style={[styles.containerHorizontal]} source={{ uri: img }} />
+                  <Image style={[styles.containerHorizontal]} source={{ uri: img }} />
                 </Carousel>
               </View>
             </View>
             <View style={{ padding: 10, backgroundColor: '#fefefe', borderTopColor: '#ccc', borderTopWidth: 1 }}>
-                <Text style={{ color: '#00BFFF', fontSize: 24 }}>￥3839.00</Text>
-                <Text style={{ color: '#080808', fontSize: 14 }}>华为 HUAWEI Mate 20 麒麟980AI智能芯片超微距影像超大广角徕卡三摄全网通4G手机</Text>
+                <Text style={{ color: '#00BFFF', fontSize: 24 }}>￥{price}</Text>
+                <Text style={{ color: '#080808', fontSize: 14 }} numberOfLines={2}>{content}</Text>
             </View>
             <WhiteSpace size="md" />
             <View>
@@ -49,7 +96,7 @@ export default class Details extends React.Component {
                     <Item extra={<Image source={{ uri: 'https://os.alipayobjects.com/rmsportal/mOoPurdIfmcuqtr.png' }} style={{ width: 20, height: 20}} />}>
                         <View style={{display: 'flex', flexDirection: 'row',alignItems: 'center' }}>
                             <Text style={{color:'#ccc',fontSize:11}}>已选规格</Text>
-                            <Text style={{color:'#080808',fontSize:13,marginLeft:8}}>6GB+64GB,翡翠冷,全网通双4G,1件</Text>
+                            <Text style={{color:'#080808',fontSize:13,marginLeft:8}}>{title}</Text>
                         </View>
                     </Item>
                 </List>
@@ -101,25 +148,77 @@ export default class Details extends React.Component {
 
 
             <View>
-                <Modal animationType={'slide'}
+                <Modal
+                    animationType={'slide'}
                     transparent={true}
                     visible={this.state.modalVisible}
-                    onrequestclose={() => { console.log("onrequestclose"); }}
-                    onShow={() => { console.log("onShow"); }}
+                    onRequestClose={() => { }}
+                    onDismiss={() => { }}
+                    onShow={() => { }}
                     supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
-                    onOrientationChange={() => { console.log("onOrientationChange"); }}>
+                    onOrientationChange={() => { }}>
+                    <TouchableHighlight style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', height: Dimensions.get("window").height, zIndex: 1, width: Dimensions.get("window").width,marginTop:-25}}
+                        onShowUnderlay={() => { this.setState({ modalVisible: false }) }}
+                        onHideUnderlay={() => { alert(1) }}
+                    >
                     <View style={{ height: 400, width: Dimensions.get('window').width, backgroundColor: 'white',position:'absolute',bottom:0 }}>
                         <View>
-                            <Text>Hello World!</Text>
-                            <View><Button><Text>Hello World!</Text></Button></View>
-                            <Button onPress={() => this.close()}><Text>关闭</Text></Button>
+                            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                <View>
+                                    <Image source={{uri:img}} style={{width:80,height:80}}/>
+                                </View>
+                                <View>
+                                    <Text style={{fontSize:16,color:'#3366FF'}}>￥{price}  有货</Text>
+                                    <Text style={{fontSize:10}}>商品编号：{_id}</Text>
+                                </View>
+                                   <Text style={{ position: 'absolute', right: 10, top: 10, width: 20, height: 20, backgroundColor: '#f5f5f5',lineHeight: 20,textAlign:'center'}} onPress={() => { this.setState({ modalVisible: false }) }}>X</Text>
+                            </View>
+                            <View>
+                                <Text style={{color:'#ccc',fontSize:10,marginLeft:5,marginBottom:10,marginTop:20}}>容量</Text>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <Button style={styles.pop}><Text style={{color:'white',fontSize:11}}>4GB+64GB</Text></Button>
+                                    <Button style={[styles.pop,styles.inactiveColor]}><Text style={{color:'black',fontSize:11}}>4GB+64GB</Text></Button>
+                                    <Button style={[styles.pop,styles.inactiveColor]}><Text style={{color:'black',fontSize:11}}>4GB+64GB</Text></Button>
+                                </View>
+                            </View>
+                            <View>
+                                <Text style={{color:'#ccc',fontSize:10,marginLeft:5,marginBottom:10,marginTop:20}}>颜色</Text>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <Button style={[styles.pop, styles.inactiveColor]}><Text style={{color:'black',fontSize:11}}>幻夜黑</Text></Button>
+                                    <Button style={styles.pop}><Text style={{color:'white',fontSize:11}}>魅蓝海</Text></Button>
+                                    <Button style={[styles.pop, styles.inactiveColor]}><Text style={{color:'black',fontSize:11}}>幻影蓝</Text></Button>
+                                    <Button style={[styles.pop, styles.inactiveColor]}><Text style={{color:'black',fontSize:11}}>梦幻紫</Text></Button>
+                                </View>
+                            </View>
+                            <View>
+                                <Text style={{color:'#ccc',fontSize:10,marginLeft:5,marginBottom:10,marginTop:20}}>版本</Text>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                                    <Button style={styles.pop}><Text style={{color:'white',fontSize:11}}>全网通4G</Text></Button>
+                                </View>
+                            </View>
+                            <View>
+                                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',justifyContent:'space-between' }}>
+                                    <Text style={{ color: '#ccc', fontSize: 10, marginLeft: 5, marginBottom: 10, marginTop: 20 }}>数量</Text>
+                                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center',marginRight:10 }}>
+                                        <Text style={styles.inputbutton} onPress={() => { this.minus() }} > — </Text>
+                                        <TextInput style={{ width: 20, height: 20, textAlign: 'center', lineHeight: 20 }}
+                                            value={this.state.value.toString()}
+                                            onChange={(text) => this.changeValue(text.nativeEvent.text)}
+                                            keyboardType='numeric' />
+                                            <Text style={styles.inputbutton} onPress={() => { this.plus() }}>＋</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <Button onPress={() => this.close()} style={{ width: Dimensions.get('window').width, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor:'#3399FF',marginTop:30}}><Text style={{fontSize:12,color:'white'}}>确定</Text></Button>
                         </View>
                     </View>
+                    </TouchableHighlight>
                 </Modal>
             </View>
           </ScrollView>
     }
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -150,8 +249,19 @@ const styles = StyleSheet.create({
     },
     btns:{
         width: Dimensions.get('window').width / 6
+    },
+    pop:{
+        width: 70, height: 25, backgroundColor: '#3399ff', lineHeight: 25, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 5
+    },
+    inputbutton: {
+        height: 25, width: 25, borderRadius: 50, lineHeight: 25, backgroundColor: '#f5f5f5', color: '#8d8d8d',
+        fontSize: 18, textAlign: 'center'
+    },
+    inactiveColor:{
+        backgroundColor:'#ccc'
     }
 });
 
 
-
+const CounterContainer = connect(mapStateToProps, { addCarts })(Details);
+export default CounterContainer;

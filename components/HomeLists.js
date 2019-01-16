@@ -35,8 +35,9 @@ class HomeLists extends React.Component {
             jsx.push(
                 <Row style={[styles.commonViewBorder]} key={i}>
                     <TouchableOpacity onPress={() => {
-                        Actions.details();
+                        Actions.details(obj);
                     }}>
+
                         <Image source={{ uri: obj.img }} style={{ width: 70, height: 70, marginTop: -10 }} />
                         <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
                             <Text style={{ fontSize: 10, lineHeight: 14 }} numberOfLines={1}>{obj.title}</Text>

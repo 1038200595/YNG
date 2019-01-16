@@ -18,7 +18,7 @@ class GoodThings extends Component {
         var jsx = [];
         for (let i = 0; i < 1; i++) {
             jsx.push(
-                <TouchableOpacity onPress={() => {Actions.details();}} key={j} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+                <TouchableOpacity onPress={() => {Actions.details(j)}} key={j} style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
                         <Text style={{ fontSize: 10, lineHeight: 14 }} numberOfLines={1}>{j.title}</Text>
                         <Text style={{ fontSize: 8 }}>￥{j.price}</Text>
@@ -41,7 +41,7 @@ class GoodThings extends Component {
                 <Grid>
                     <Col style={{ backgroundColor: 'white', height: 200, width: Dimensions.get('window').width / 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                         <TouchableOpacity onPress={() => {
-                            Actions.details();
+                            Actions.details(list[4]);
                         }}>
                             <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
                             <Text numberOfLines={1}>{list[4].title}</Text>

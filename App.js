@@ -3,7 +3,7 @@ import List from './components/List';
 import Home from "./components/Home";
 import Details from "./components/Details";
 import TabIcon from './components/Tabicon';
-import Cart from './components/Cart';
+import Carts from './components/Carts';
 import My from './components/My';
 import {AppLoading} from 'expo' ;
 import {View,Text,Image,Dimensions}from 'react-native';
@@ -49,7 +49,7 @@ export default class App extends React.Component {
                             <Scene key="member" component={List} initial hideNavBar={true}/>
                         </Stack>
                         <Stack key="cart" title="购物车" icon={TabIcon} iconName="shopping-cart">
-                            <Scene key="cart" component={Cart} initial hideNavBar={true} />
+                            <Scene key="cart" component={Carts} initial hideNavBar={true} />
                         </Stack>
                         <Stack key="my" title="我的" icon={TabIcon} iconName="user">
                             <Scene key="my" component={My} initial hideNavBar={true}/>
