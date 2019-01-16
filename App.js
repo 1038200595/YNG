@@ -7,7 +7,7 @@ import Carts from './components/Carts';
 import My from './components/My';
 import {AppLoading} from 'expo' ;
 import {View,Text,Image,Dimensions}from 'react-native';
-import {Router,Stack,Scene,Tabs} from 'react-native-router-flux';
+import {Router,Stack,Scene,Tabs,Modal} from 'react-native-router-flux';
 import { Provider } from 'react-redux'
 import store from './store'
 
@@ -40,21 +40,28 @@ export default class App extends React.Component {
         return (
             <Provider store={store}>
                 <Router>
-                    <Tabs key="tabbar" activeTintColor="#1E90FF" inactiveTintColor="#C0C0C0"   >
-                        <Stack key="root" title="商城" icon={TabIcon} iconName="home">
-                            <Scene key="home" component={Home} initial hideNavBar={true}/>
+                    <Modal key="tabbar" activeTintColor="#1E90FF" inactiveTintColor="#C0C0C0"    hideNavBar={true}>
+                        <Scene key='go'  hideNavBar={true}>
+                            <Tabs>
+                                <Stack key="root" title="商城" icon={TabIcon} iconName="home">
+                                    <Scene key="home" component={Home} initial hideNavBar={true}/>
+                                </Stack>
+                                <Stack key="member" title="会员" icon={TabIcon} iconName="anchor">
+                                    <Scene key="member" component={List} initial hideNavBar={true}/>
+                                </Stack>
+
+                                <Stack key="cart" title="购物车" icon={TabIcon} iconName="shopping-cart">
+                                    <Scene key="cart" component={Carts} initial hideNavBar={true} />
+                                </Stack>
+
+                                <Stack key="my" title="我的" icon={TabIcon} iconName="user">
+                                    <Scene key="my" component={My} initial hideNavBar={true}/>
+                                </Stack>
+                            </Tabs>
                             <Scene key="details" component={Details}  hideNavBar={true}/>
-                        </Stack>
-                        <Stack key="member" title="会员" icon={TabIcon} iconName="anchor">
-                            <Scene key="member" component={List} initial hideNavBar={true}/>
-                        </Stack>
-                        <Stack key="cart" title="购物车" icon={TabIcon} iconName="shopping-cart">
-                            <Scene key="cart" component={Carts} initial hideNavBar={true} />
-                        </Stack>
-                        <Stack key="my" title="我的" icon={TabIcon} iconName="user">
-                            <Scene key="my" component={My} initial hideNavBar={true}/>
-                        </Stack>
-                    </Tabs>
+                            <Scene key="cart" component={Carts} hideNavBar={true} />
+                        </Scene>
+                    </Modal>
                 </Router>
             </Provider>
         );

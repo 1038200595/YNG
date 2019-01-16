@@ -8,6 +8,7 @@ import { minus, changeCheck, checkAll, remove, checkAllDelete} from '../actions/
 import {  WhiteSpace } from "@ant-design/react-native";
 import { Dialog, DialogContent } from "react-native-popup-dialog";
 import  Icons from 'react-native-vector-icons/AntDesign';
+import { Actions } from "react-native-router-flux";
 
 
 
@@ -150,7 +151,7 @@ class Carts extends React.Component {
                 )
             }
         }else{
-            jsx.push(<Image key={-1} source={{ uri: "http://bpic.588ku.com/element_water_img/18/09/20/02020f3b0fa2b36701d5d9439e674f11.jpg" }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height*0.72 }} />);
+            jsx.push(<Image key={-1} source={{ uri: "http://bpic.588ku.com/element_water_img/18/09/20/02020f3b0fa2b36701d5d9439e674f11.jpg" }} style={{ width: Dimensions.get('window').width, height: Dimensions.get('window').height*0.795}} />);
         }
         return jsx;
     }
@@ -175,22 +176,21 @@ class Carts extends React.Component {
 
 
         return (
-                <Container>
+            <Container>
                 <View style={{ width: Dimensions.get('window').width, height: 80, backgroundColor: 'white',display: 'flex', flexDirection: 'row',justifyContent:'center',borderBottomColor:'#cdcdcd',borderBottomWidth:0.5}}>
                         <View>
-                            <Text style={{fontSize:16,marginTop:40,fontWeight:'400'}}>购物车</Text>
+                            <Text style={{fontSize:16,marginTop:40,fontWeight:'400'}} onPress={()=>{Actions.root()}}>购物车</Text>
                         </View>
                         <View icon style={{display: 'flex', flexDirection: 'row',position:'absolute',right:20,top:45}}>
                             <Text style={{fontSize:14}} onPress={()=>{this.edit()}}>编辑</Text>
                             <Icons  active name="customerservice" style={{ fontSize: 16, color: 'black',marginLeft:10,marginTop:2}}/>
                         </View>
-                    </View>
-                    <ScrollView>
+                </View>
+                <ScrollView>
                     <Content scrollEnabled={false}>
                         {this.showList()}
                     </Content></ScrollView>
-
-                    <View style={{display: 'flex', flexDirection: 'row',justifyContent:'space-between',borderTopColor:'#ccc',borderTopWidth:0.5}}>
+                <View style={{display: 'flex', flexDirection: 'row',justifyContent:'space-between',borderTopColor:'#ccc',borderTopWidth:0.5}}>
                         <View style={{display: 'flex', flexDirection: 'row',justifyContent:'center',alignItems:'center'}}>
                             <CheckBox style={{ marginLeft:10,marginRight: 20, borderRadius: 50 }} onPress={()=>this.checkAll(allflag)} checked={allflag} />
                             <Text style={{fontSize:14,color:'#121212'}}>全选</Text>
@@ -207,7 +207,6 @@ class Carts extends React.Component {
                         <View style={{  width: 100, height: 50, backgroundColor: 'white', lineHeight: 50, fontSize: 20,flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 5,display:this.state.diss}}><Text style={{color:'#EE0000',fontSize:11,borderWidth:0.3,borderColor:'#ee0000',borderRadius:10,padding:3,display:this.state.diss}} onPress={()=>{this.deleteAll(this.props.carts)}}> 删　除 </Text></View>
                         </View>
                     </View>
-
                 <Dialog
                     onDismiss={() => { if (this.state.sure) {} }}
                     visible={this.state.visible}
@@ -229,8 +228,7 @@ class Carts extends React.Component {
                         </View>
                     </DialogContent>
                 </Dialog>
-                </Container>
-                
+            </Container>
         )
     }
 }
