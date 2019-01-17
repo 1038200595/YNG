@@ -4,7 +4,7 @@ import { Stepper} from '@ant-design/react-native';
 import { StyleSheet,Dimensions,TextInput,Image,PixelRatio,ScrollView,FlatList,ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import { Container, Header, Content, SwipeRow, View, Text, Icon, Button, Title } from 'native-base';
-import { minus, changeCheck, checkAll, remove, checkAllDelete} from '../actions/index';
+import { minus, changeCheck, checkAll, remove, checkAllDelete,clear} from '../actions/index';
 import {  WhiteSpace } from "@ant-design/react-native";
 import { Dialog, DialogContent } from "react-native-popup-dialog";
 import  Icons from 'react-native-vector-icons/AntDesign';
@@ -93,6 +93,11 @@ class Carts extends React.Component {
         })
     }
 
+    /* *******************结算************************** */
+    Clearing=(all)=>{
+        Actions.clear();
+        this.props.clear(all);
+    }
 
 
     edit(){
@@ -174,7 +179,6 @@ class Carts extends React.Component {
             allflag = true;
         }
 
-
         return (
             <Container>
                 <View style={{ width: Dimensions.get('window').width, height: 80, backgroundColor: 'white',display: 'flex', flexDirection: 'row',justifyContent:'center',borderBottomColor:'#cdcdcd',borderBottomWidth:0.5}}>
@@ -203,7 +207,7 @@ class Carts extends React.Component {
                                     <Text style={{fontSize:10,color:'#141414',marginTop:2,marginLeft:-10}}>   不含运费</Text>
                                 </View>
                             </View>
-                        <Button style={{  width: 100, height: 50, backgroundColor: '#3399ff', lineHeight: 50, fontSize: 20,flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 5,display: this.state.dis}}><Text style={{color:'white',fontSize:11}}>去结算</Text></Button>
+                        <Button style={{ width: 100, height: 50, backgroundColor: '#3399ff', lineHeight: 50, fontSize: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 5, display: this.state.dis }} onPress={() => { this.Clearing(this.props.carts) }}><Text style={{color:'white',fontSize:11}}>去结算</Text></Button>
                         <View style={{  width: 100, height: 50, backgroundColor: 'white', lineHeight: 50, fontSize: 20,flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginLeft: 5,display:this.state.diss}}><Text style={{color:'#EE0000',fontSize:11,borderWidth:0.3,borderColor:'#ee0000',borderRadius:10,padding:3,display:this.state.diss}} onPress={()=>{this.deleteAll(this.props.carts)}}> 删　除 </Text></View>
                         </View>
                     </View>
@@ -254,7 +258,7 @@ const styles = StyleSheet.create({
 
 
 
-export default connect(mapStateToProps, { minus, changeCheck, checkAll, remove, checkAllDelete })(Carts)
+export default connect(mapStateToProps, { minus, changeCheck, checkAll, remove, checkAllDelete, clear })(Carts)
 
 
 
