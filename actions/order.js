@@ -7,4 +7,10 @@ export const order = data => {
     }
 };
 
-
+/* *******************订单完成后******************* */
+export const over = (carts) => {
+    return {
+        type: 'OVER',
+        payload: carts
+    }
+}

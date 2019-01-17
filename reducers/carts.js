@@ -56,6 +56,19 @@ function carts(state = initialState, action) {
             })
             return [...state];
 
+
+        /* *****************购物车中未结算的************************* */
+        case "OVER":
+            // console.log(state, '-----------------all----------------------');
+            // console.log(action.payload, '-----------reducer---------------------');
+            var arr
+            action.payload.forEach((element) => {
+                arr = _.filter(state, back => back._id !== element._id);
+                state = arr;
+            })
+            // console.log(state, '-------------购物车还剩下的----------------------')
+            return [...state];
+
         default:
             return [...state];
     }

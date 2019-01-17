@@ -5,12 +5,13 @@ import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import { Actions } from 'react-native-router-flux';
-import { clear,order } from '../actions/index';
+import { clear,order,over } from '../actions/index';
 
 
 const mapStateToProps = (state)=>{
     return {
-        buybaby:state.clear
+        buybaby:state.clear,
+        carts:state.carts
     }
   }
 
@@ -26,6 +27,7 @@ class Clear extends React.Component{
     paysuccess(data){
         Actions.paysuccess();
         this.props.order(data);
+        this.props.over(data)
     }
 
 
@@ -197,7 +199,7 @@ class Clear extends React.Component{
     }
   }
 
-const CounterContainer = connect(mapStateToProps, { clear,order})(Clear);
+const CounterContainer = connect(mapStateToProps, { clear,order,over})(Clear);
 export default CounterContainer;
 
 
