@@ -175,12 +175,12 @@ class Clear extends React.Component{
 
                           <View style={styles.equity}  >
                               <Text>支付宝账号</Text>
-                              <Text>183******46</Text>
+                              <Text>157******42</Text>
                           </View>
 
                           <View style={styles.equity}  >
                               <Text>付款方式</Text>
-                              <Text>农业银行储蓄卡(6666)</Text>
+                              <Text>农业银行储蓄卡(8888)</Text>
                           </View>
 
                           <Button full style={{ borderRadius: 20, backgroundColor: "#06f", marginTop: 10 }}

@@ -5,7 +5,7 @@ import { Card, CardItem, Thumbnail, Button, Left, Body, Icon, Container } from '
 import { Carousel, WhiteSpace, List } from "@ant-design/react-native";
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import { connect } from "react-redux";
-import {addCarts} from '../actions/index';
+import {addCarts,clear} from '../actions/index';
 import { Actions } from "react-native-router-flux";
 
 
@@ -23,20 +23,30 @@ class Details extends React.Component {
         super(props);
         this.state = {
             modalVisible:false,
-            value:1
+            value:1,
+            which:1
         }
     }
 
-    addCart(){
+    addCart(a){
         this.setState({
-            modalVisible:true
+            modalVisible:true,
+            which:a
         })
     }
     close(){
         this.setState({
             modalVisible:false
         })
-        this.props.addCarts(this.state.value, this.props.navigation.state.params);
+        if(this.state.which==1){
+            this.props.addCarts(this.state.value, this.props.navigation.state.params);
+        }else{
+            Actions.clear();
+            this.props.navigation.state.params.quantity=this.state.value;
+            this.props.navigation.state.params.which=this.state.which;
+            this.props.clear([this.props.navigation.state.params]);
+        }
+        
     }
 
     minus(){
@@ -208,10 +218,10 @@ class Details extends React.Component {
                                     <Text style={{ fontSize: 10, marginTop: -20 }}>购物车</Text>
                                 </Button>
                             </View>
-                            <Button style={{ backgroundColor: '#FFA500', width: Dimensions.get('window').width / 4, height: 40, fontSize: 20, lineHeight: 40, flex: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 0 }} onPress={() => this.addCart()}>
+                            <Button style={{ backgroundColor: '#FFA500', width: Dimensions.get('window').width / 4, height: 40, fontSize: 20, lineHeight: 40, flex: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 0 }} onPress={() => this.addCart(1)}>
                                 <Text style={{ color: 'white' }}>加入购物车</Text>
                             </Button>
-                            <Button style={{ backgroundColor: '#3399ff', width: Dimensions.get('window').width / 4, height: 40, fontSize: 20, lineHeight: 40, flex: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 0 }}>
+                            <Button style={{ backgroundColor: '#3399ff', width: Dimensions.get('window').width / 4, height: 40, fontSize: 20, lineHeight: 40, flex: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 0 }} onPress={() => this.addCart(-1)}>
                                 <Text style={{ color: 'white' }}>立即购买</Text>
                             </Button>
                         </View>
@@ -266,5 +276,5 @@ const styles = StyleSheet.create({
 });
 
 
-const CounterContainer = connect(mapStateToProps, { addCarts })(Details);
+const CounterContainer = connect(mapStateToProps, { addCarts,clear })(Details);
 export default CounterContainer;

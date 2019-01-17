@@ -12,7 +12,10 @@ import {AppLoading} from 'expo' ;
 import {View,Text,Image,Dimensions}from 'react-native';
 import {Router,Stack,Scene,Tabs,Modal} from 'react-native-router-flux';
 import { Provider } from 'react-redux'
-import store from './store'
+import storeConfig from './store'
+const {persistor, store} =storeConfig();
+import { PersistGate } from 'redux-persist/integration/react'
+
 
 export default class App extends React.Component {
     constructor(props) {
@@ -41,6 +44,7 @@ export default class App extends React.Component {
         }
         
         return <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
             <Router>
               <Modal key="tabbar" activeTintColor="#1E90FF" inactiveTintColor="#C0C0C0" hideNavBar={true}>
                 <Scene key="go" hideNavBar={true}>
@@ -59,6 +63,11 @@ export default class App extends React.Component {
                     <Stack key="my" title="我的" icon={TabIcon} iconName="user">
                       <Scene key="my" component={My} initial hideNavBar={true} />
                     </Stack>
+
+                    <Stack key="orderlist" title="订单列表" icon={TabIcon} iconName="user">
+                      <Scene key="orderlist" component={OrderList} initial hideNavBar={true} />
+                    </Stack>
+                    
                   </Tabs>
                   <Scene key="details" component={Details} hideNavBar={false}/>
                   <Scene key="cart" component={Carts} hideNavBar={true} />
@@ -68,6 +77,7 @@ export default class App extends React.Component {
                 </Scene>
               </Modal>
             </Router>
-          </Provider>;
+        </PersistGate>
+    </Provider>;
     }
 }

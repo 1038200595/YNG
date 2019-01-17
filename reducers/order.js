@@ -2,6 +2,9 @@ function order(state = [], action) {
     switch (action.type) {
 
         case "ORDER":
+        console.log(state,'??????????????????')
+        // state=[];
+        // return state;
         if(action.payload.length>0){
             return [...state,[...action.payload]];
         }else{

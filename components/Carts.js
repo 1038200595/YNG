@@ -15,6 +15,7 @@ import { Actions } from "react-native-router-flux";
 
 
 const mapStateToProps = (state) => {
+    console.log(state.carts,'************************************');
     return {
         carts:state.carts,
     }
@@ -95,8 +96,12 @@ class Carts extends React.Component {
 
     /* *******************结算************************** */
     Clearing=(all)=>{
-        Actions.clear();
-        this.props.clear(all);
+        all.forEach((element)=>{
+            if(element.choose==true){
+                Actions.clear();
+                this.props.clear(all);
+            }
+        })        
     }
 
 
