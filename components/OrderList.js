@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { Actions } from "react-native-router-flux";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { order } from '../actions/index';
+import Icons from 'react-native-vector-icons/AntDesign';
 
 
 
@@ -57,6 +58,10 @@ class OrderList extends React.Component {
         const data=this.props.orderList;
         return (
             <View style={{ width:Dimensions.get('window').width,height:Dimensions.get('window').height,flex:1}}>
+                <View style={{ width: Dimensions.get('window').width, height: 80, backfaceVisibility: 'visible', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: '#ababab', borderBottomWidth: 0.5,backgroundColor:'white' }}>
+                    <Icons active name="left" style={{ position: 'absolute', fontSize: 16, color: 'black', marginLeft: 5, marginTop: 42, width: 24, height: 24, backgroundColor: 'white', textAlign: 'center', lineHeight: 24 }} onPress={() => { this.props.navigation.goBack() }} />
+                    <Text style={{ color: 'black', fontSize: 16, position: 'absolute', marginLeft: 45, marginTop: 42, }}>订单列表</Text>
+                </View>
             <ScrollView style={{display:'flex', flex:1}}>
             {
                data.map((element,index)=>(

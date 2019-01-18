@@ -7,6 +7,8 @@ import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import { connect } from "react-redux";
 import {addCarts,clear} from '../actions/index';
 import { Actions } from "react-native-router-flux";
+import  Icons from 'react-native-vector-icons/AntDesign';
+
 
 
 const Item = List.Item;
@@ -90,15 +92,21 @@ class Details extends React.Component {
 
         return(
             <Container>
+                <View style={{ width: Dimensions.get('window').width, height: 80,backfaceVisibility:'hidden' ,display: 'flex', flexDirection: 'row',justifyContent:'space-between'}}>
+                        <Icons  active name="left" style={{position:'absolute', fontSize: 16, color: 'white',marginLeft:20,marginTop:42,width:24,height:24,borderRadius:12,backgroundColor:'#aaa',textAlign:'center',lineHeight:24}} onPress={()=>{this.props.navigation.goBack()}}/>
+                    
+                        <View icon style={{display: 'flex', flexDirection: 'row',position:'absolute',right:20,top:45}}>
+                            <Icons  active name="login" style={{ fontSize: 16, color: 'white',marginLeft:20,marginTop:2,width:24,height:24,borderRadius:12,backgroundColor:'#aaa',textAlign:'center',lineHeight:24}}/>
+                            <Icons  active name="cloud" style={{ fontSize: 16, color: 'white',marginLeft:10,marginTop:2,width:24,height:24,borderRadius:12,backgroundColor:'#aaa',textAlign:'center',lineHeight:24}}/>
+                        </View>
+                </View>
                 <ScrollView style={styles.container}>
-                    <View style={{ marginTop: 30 }}>
                     <View>
                         <Carousel style={styles.wrapper} selectedIndex={2} autoplay infinite dotStyle={{ width: 5, height: 5 }}>
                         <Image style={[styles.containerHorizontal]} source={{ uri: img }} />
                         <Image style={[styles.containerHorizontal]} source={{ uri: img }} />
                         <Image style={[styles.containerHorizontal]} source={{ uri: img }} />
                         </Carousel>
-                    </View>
                     </View>
                     <View style={{ padding: 10, backgroundColor: '#fefefe', borderTopColor: '#ccc', borderTopWidth: 1 }}>
                         <Text style={{ color: '#00BFFF', fontSize: 24 }}>￥{price}</Text>

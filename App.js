@@ -64,16 +64,16 @@ export default class App extends React.Component {
                       <Scene key="my" component={My} initial hideNavBar={true} />
                     </Stack>
 
-                    <Stack key="orderlist" title="订单列表" icon={TabIcon} iconName="user">
+                    {/* <Stack key="orderlist" title="订单列表" icon={TabIcon} iconName="user">
                       <Scene key="orderlist" component={OrderList} initial hideNavBar={true} />
-                    </Stack>
+                    </Stack> */}
                     
                   </Tabs>
-                  <Scene key="details" component={Details} hideNavBar={false}/>
+                  <Scene key="details" component={Details} hideNavBar={true}/>
                   <Scene key="cart" component={Carts} hideNavBar={true} />
-                  <Scene key="clear" component={Clear} hideNavBar={false} title="确认订单" navBarButtonColor="#ababab" titleStyle={{ color: "#ababab" }} />
-                  <Scene key="paysuccess" component={Paysuccess} hideNavBar={false} title="支付成功" navBarButtonColor="#ababab" titleStyle={{ color: "#ababab" }} />
-                  <Scene key="orderlist" component={OrderList} hideNavBar={false} />
+                  <Scene key="clear" component={Clear} hideNavBar={true}  />
+                  <Scene key="paysuccess" component={Paysuccess} hideNavBar={true}/>
+                  <Scene key="orderlist" component={OrderList} hideNavBar={true} />
                 </Scene>
               </Modal>
             </Router>

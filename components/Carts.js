@@ -120,6 +120,7 @@ class Carts extends React.Component {
     }
 
     showList() {
+        console.log(this.props.navigation.goBack,'???????????????????')
         const { carts } = this.props;
         var jsx = [];
         if (carts.length > 0) {
@@ -186,10 +187,11 @@ class Carts extends React.Component {
 
         return (
             <Container>
-                <View style={{ width: Dimensions.get('window').width, height: 80, backgroundColor: 'white',display: 'flex', flexDirection: 'row',justifyContent:'center',borderBottomColor:'#cdcdcd',borderBottomWidth:0.5}}>
-                        <View>
-                            <Text style={{fontSize:16,marginTop:40,fontWeight:'400'}} onPress={()=>{Actions.root()}}>购物车</Text>
-                        </View>
+                <View style={{ width: Dimensions.get('window').width, height: 80, backgroundColor: 'white',display: 'flex', flexDirection: 'row',justifyContent:'space-between',borderBottomColor:'#cdcdcd',borderBottomWidth:0.5}}>
+                        <Icons  active name="left" style={{position:'absolute', fontSize: 16, color: 'black',marginLeft:20,marginTop:42}} onPress={()=>{this.props.navigation.goBack()}}/>
+                        
+                    <Text style={{ fontSize: 16, marginTop: 40, fontWeight: '400', position: 'absolute', left: Dimensions.get('window').width/2-20}} onPress={()=>{Actions.root()}}>购物车</Text>
+                        
                         <View icon style={{display: 'flex', flexDirection: 'row',position:'absolute',right:20,top:45}}>
                             <Text style={{fontSize:14}} onPress={()=>{this.edit()}}>编辑</Text>
                             <Icons  active name="customerservice" style={{ fontSize: 16, color: 'black',marginLeft:10,marginTop:2}}/>

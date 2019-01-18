@@ -6,6 +6,9 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import { Actions } from 'react-native-router-flux';
 import { clear,order,over } from '../actions/index';
+import Icons from 'react-native-vector-icons/AntDesign';
+import { WhiteSpace } from "@ant-design/react-native";
+
 
 
 const mapStateToProps = (state)=>{
@@ -42,6 +45,11 @@ class Clear extends React.Component{
         }
         
       return <Container style={styles.box}>
+        <View style={{ width: Dimensions.get('window').width, height: 80, backfaceVisibility: 'visible', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderBottomColor: '#cdcdcd', borderBottomWidth: 0.5 }}>
+          <Icons active name="left" style={{ position: 'absolute', fontSize: 16, color: 'black', marginLeft: 5, marginTop: 42, width: 24, height: 24, backgroundColor: 'white', textAlign: 'center', lineHeight: 24 }} onPress={() => { this.props.navigation.goBack() }} />
+          <Text style={{ color: 'black', fontSize: 16, position: 'absolute', marginLeft: 45, marginTop: 42,}}>确认订单</Text>
+        </View>
+        <WhiteSpace size="sm" style={{ backgroundColor: '#F5F5F5' }} />
             <ScrollView style={{ flex: 1 }}>
               <View>
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "white", padding: 10 }}>
@@ -69,6 +77,7 @@ class Clear extends React.Component{
               </View>
 
               {data.map(element => (<View key={element._id+1}>
+                <WhiteSpace size="sm" style={{ backgroundColor: '#F5F5F5' }} />
                   <View style={{ display: "flex", flexDirection: "row", alignItems: "center", backgroundColor: "white", marginTop: 4, paddingHorizontal: 10, marginTop: 5 }}>
                     <Icon name={"briefcase"} style={{ fontSize: 14, color: "red", marginRight: 10 }} />
                     <Text
