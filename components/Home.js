@@ -9,7 +9,7 @@ import { Actions } from "react-native-router-flux";
 var _ = require("lodash");
 import Icons from 'react-native-vector-icons/AntDesign';
 import Icont from 'react-native-vector-icons/FontAwesome';
-import { Camera, Permissions } from 'expo';
+import { Camera, Permissions,BarCodeScanner,Constants } from 'expo';
 
 
 const mapStateToProps = (state) => {
@@ -55,7 +55,8 @@ class Home extends React.Component {
             hasCameraPermission: null,              //照相机权限
             type: Camera.Constants.Type.back,       //照相机类型
             isShowCamera: false,                    //是否开启照相机
-            uri: ''
+            uri: '',
+            isShowScan:false
         }
     }
 
@@ -145,11 +146,24 @@ class Home extends React.Component {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
     }
+    async componentDidMount() {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        this.setState({ hasCameraPermission: status === 'granted' });
+    }
+
 
     camera(){
         this.setState({
             isShowCamera:true
         })
+    }
+    scan(){
+        this.setState({
+            isShowScan:true
+        })
+    }
+    handleBarCodeScanned = ({ type, data }) => {
+        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     }
     
 
@@ -213,6 +227,18 @@ class Home extends React.Component {
                         </View>
                     </Camera>)
         }
+        //判断是否点击二维码
+        if(this.state.isShowScan){
+            return(<View style={styles.QR}>
+                    <BarCodeScanner
+                        onBarCodeRead={this._handleBarCodeRead}
+                        style={styles.QR}
+                    >
+                    <Text onPress={()=>{this.setState({ isShowScan:false })}}>关闭</Text>
+                    </BarCodeScanner>
+                    </View>
+            )
+        }
 
         return (
             <ScrollView style={{ backgroundColor: '#F5F5F5' }}>
@@ -230,7 +256,7 @@ class Home extends React.Component {
                         </View>
 
                         <View icon style={{ display: 'flex', flexDirection: 'column', position: 'absolute', right: 20, top: 22 }}>
-                            <Icont active name="qrcode" style={{ fontSize: 16, color: 'white', marginLeft: 10, marginTop: 2, width: 24, height: 24, borderRadius: 12,  textAlign: 'center', lineHeight: 24 }} />
+                            <Icont active name="qrcode" style={{ fontSize: 16, color: 'white', marginLeft: 10, marginTop: 2, width: 24, height: 24, borderRadius: 12,  textAlign: 'center', lineHeight: 24 }} onPress={()=>{this.scan()}}/>
                             <Text style={{fontSize:10,color:'white'}}>  扫一扫</Text>
                         </View>
                     </View>
@@ -326,6 +352,15 @@ const styles = StyleSheet.create({
     text: {
         color: '#fff',
         fontSize: 36,
+    },
+    QR: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: Constants.statusBarHeight,
+        backgroundColor: '#ecf0f1',
+        width:Dimensions.get('window').width,
+        height:Dimensions.get('window').height
     }
 });
 
