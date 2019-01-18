@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, ScrollView, TouchableOpacity,TouchableHighlight } from 'react-native';
-import { Carousel, Grid, WhiteSpace } from '@ant-design/react-native';
+import { StyleSheet, Text, View, Image, Dimensions, ScrollView, TouchableOpacity, TouchableHighlight, Alert, Icon, TextInput,Button, } from 'react-native';
+import { Carousel, Grid, WhiteSpace,SearchBar } from '@ant-design/react-native';
 import GoodThings from "./GoodThings";
 import { connect } from 'react-redux';
 import { fetchList } from '../actions';
 import HomeLists from "./HomeLists";
 import { Actions } from "react-native-router-flux";
 var _ = require("lodash");
+import Icons from 'react-native-vector-icons/AntDesign';
+import Icont from 'react-native-vector-icons/FontAwesome';
+import { Camera, Permissions } from 'expo';
 
 
 const mapStateToProps = (state) => {
@@ -48,6 +51,11 @@ class Home extends React.Component {
         super(props);
         this.state = {
             page: 1,
+            value:'小米',
+            hasCameraPermission: null,              //照相机权限
+            type: Camera.Constants.Type.back,       //照相机类型
+            isShowCamera: false,                    //是否开启照相机
+            uri: ''
         }
     }
 
@@ -131,12 +139,103 @@ class Home extends React.Component {
         return jsx;
     }
 
+
+    //相机
+    async componentWillMount() {
+        const { status } = await Permissions.askAsync(Permissions.CAMERA);
+        this.setState({ hasCameraPermission: status === 'granted' });
+    }
+
+    camera(){
+        this.setState({
+            isShowCamera:true
+        })
+    }
     
 
     render() {
         const list=this.props.lists;
+
+        //判断是否点击相机
+        if(this.state.isShowCamera){
+            return (<Camera
+                        style={{ flex: 1 }}
+                        type={this.state.type}
+                        ref={ref => { this.camera = ref; }}     //参照官网的Methods
+                    >
+                        <View
+                            style={{
+                                flex: 1,
+                                backgroundColor: 'transparent',
+                                flexDirection: 'row',
+                            }}>
+                            <TouchableOpacity
+                                style={{
+                                    flex: 1,
+                                    alignSelf: 'flex-end',
+                                    alignItems: 'center',
+                                }}
+                                onPress={() => {
+                                    this.setState({
+                                        type: this.state.type === Camera.Constants.Type.back
+                                            ? Camera.Constants.Type.front
+                                            : Camera.Constants.Type.back,
+                                    });
+                                }}>
+                                <Text
+                                    style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+                                    {' '}Flip{' '}
+                                </Text>
+                            </TouchableOpacity>
+                            {/* 复制一个开始拍照的点击按钮 */}
+                            <TouchableOpacity
+                                style={{
+                                    flex: 1,                    //flex为0.1改成flex为1
+                                    alignSelf: 'flex-end',
+                                    alignItems: 'center',
+                                }}
+                                //参照官网的Methods
+                                onPress={async () => {
+                                    if (this.camera) {
+                                        let photo = await this.camera.takePictureAsync().then(this.onPictureSaved)
+                                        console.log(photo)
+                                        this.setState({
+                                            isShowCamera: false,
+                                            uri: photo.uri
+                                        })
+                                    }
+                                }}>
+                                <Text
+                                    style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+                                    {' '}开始拍照{' '}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Camera>)
+        }
+
         return (
             <ScrollView style={{ backgroundColor: '#F5F5F5' }}>
+                <TouchableHighlight style={{backgroundColor:'rgba(0,0,0,0)',position:'absolute',top:0,zIndex:999}}>
+                    <View style={{ width: Dimensions.get('window').width, height: 80,display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View icon style={{ display: 'flex', flexDirection: 'column', position: 'absolute', left: 20, top: 22 }}>
+                            <Icont active name="camera" style={{ fontSize: 16, color: 'white', marginTop: 2, width: 24, height: 24, borderRadius: 12,  textAlign: 'center', lineHeight: 24 }} onPress={()=>{this.camera()}}/>
+                            <Text style={{fontSize:10,color:'white'}}> 相机</Text>
+                        </View>
+
+                        <View style={{ display: 'flex', flexDirection: 'column', position: 'absolute', left: 60, top: 28 }}>
+                            <TextInput placeholder='小米' style={{ width: 240, backgroundColor: '#eee', height: 30, fontSize: 12, paddingHorizontal: 5, borderRadius: 15, borderColor: "#666", borderWidth: 0.5}}>
+                            </TextInput>
+                            <Icont name={'search'} size={20} style={{ color: '#ccc', fontWeight: '100',marginTop:-25,marginLeft:200}} />
+                        </View>
+
+                        <View icon style={{ display: 'flex', flexDirection: 'column', position: 'absolute', right: 20, top: 22 }}>
+                            <Icont active name="qrcode" style={{ fontSize: 16, color: 'white', marginLeft: 10, marginTop: 2, width: 24, height: 24, borderRadius: 12,  textAlign: 'center', lineHeight: 24 }} />
+                            <Text style={{fontSize:10,color:'white'}}>  扫一扫</Text>
+                        </View>
+                    </View>
+                </TouchableHighlight>
+
                 {/* 轮播图 */}
                 <View>
                     <Carousel

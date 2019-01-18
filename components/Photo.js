@@ -26,7 +26,7 @@ export default class Photo extends React.Component {
         this.state = {
             hasCameraPermission: null,              //照相机权限
             type: Camera.Constants.Type.back,       //照相机类型
-            isShowCamera: true,                    //是否开启照相机
+            isShowCamera: false,                    //是否开启照相机
             uri: ''
         }
     }
