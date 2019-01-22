@@ -8,6 +8,7 @@ import Clear from './components/Clear';
 import Paysuccess from './components/Paysuccess';
 import OrderList from "./components/OrderList";
 import My from './components/My';
+import Test from './components/Test';
 import {AppLoading} from 'expo' ;
 import {View,Text,Image,Dimensions}from 'react-native';
 import {Router,Stack,Scene,Tabs,Modal} from 'react-native-router-flux';
@@ -67,6 +68,10 @@ export default class App extends React.Component {
                     {/* <Stack key="orderlist" title="订单列表" icon={TabIcon} iconName="user">
                       <Scene key="orderlist" component={OrderList} initial hideNavBar={true} />
                     </Stack> */}
+
+                    <Stack key="test" title="测试页" icon={TabIcon} iconName="user">
+                      <Scene key="test" component={Test} initial hideNavBar={true} />
+                    </Stack>
                     
                   </Tabs>
                   <Scene key="details" component={Details} hideNavBar={true}/>

@@ -46,7 +46,9 @@ const data=[
 
 var k=8;  //轮播广告需要进行遍历数组arr[0]-arr[8]
 
+
 class Home extends React.Component {
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -56,14 +58,13 @@ class Home extends React.Component {
             type: Camera.Constants.Type.back,       //照相机类型
             isShowCamera: false,                    //是否开启照相机
             uri: '',
-            isShowScan:false
+            isShowScan:false,
+            inputValue:''
         }
     }
 
 
-    componentDidMount(){
-        this.props.fetchList();
-    }
+
     
     // advertise(list){
     //     if(list.length>0){
@@ -147,6 +148,7 @@ class Home extends React.Component {
         this.setState({ hasCameraPermission: status === 'granted' });
     }
     async componentDidMount() {
+        this.props.fetchList();
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
     }
@@ -165,7 +167,13 @@ class Home extends React.Component {
     handleBarCodeScanned = ({ type, data }) => {
         alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     }
-    
+
+    searchInput(text){
+        console.log(text);
+    }
+
+
+
 
     render() {
         const list=this.props.lists;
@@ -240,6 +248,7 @@ class Home extends React.Component {
             )
         }
 
+        
         return (
             <ScrollView style={{ backgroundColor: '#F5F5F5' }}>
                 <TouchableHighlight style={{backgroundColor:'rgba(0,0,0,0)',position:'absolute',top:0,zIndex:999}}>
@@ -250,17 +259,20 @@ class Home extends React.Component {
                         </View>
 
                         <View style={{ display: 'flex', flexDirection: 'column', position: 'absolute', left: 60, top: 28 }}>
-                            <TextInput placeholder='小米' style={{ width: 240, backgroundColor: '#eee', height: 30, fontSize: 12, paddingHorizontal: 5, borderRadius: 15, borderColor: "#666", borderWidth: 0.5}}>
+                            <TextInput placeholder='小米' style={{ width: 240, backgroundColor: '#eee', height: 30, fontSize: 12, paddingHorizontal: 5, borderRadius: 15, borderColor: "#666", borderWidth: 0.5,padding:5}} onChangeText={(text) => this.searchInput(text)}>
                             </TextInput>
-                            <Icont name={'search'} size={20} style={{ color: '#ccc', fontWeight: '100',marginTop:-25,marginLeft:200}} />
+                            <Icont name={'search'} size={20} style={{ color: '#ccc', fontWeight: '100',marginTop:-25,marginLeft:210}} />
                         </View>
+
 
                         <View icon style={{ display: 'flex', flexDirection: 'column', position: 'absolute', right: 20, top: 22 }}>
                             <Icont active name="qrcode" style={{ fontSize: 16, color: 'white', marginLeft: 10, marginTop: 2, width: 24, height: 24, borderRadius: 12,  textAlign: 'center', lineHeight: 24 }} onPress={()=>{this.scan()}}/>
                             <Text style={{fontSize:10,color:'white'}}>  扫一扫</Text>
                         </View>
+                        
                     </View>
                 </TouchableHighlight>
+                
 
                 {/* 轮播图 */}
                 <View>

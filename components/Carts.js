@@ -120,7 +120,6 @@ class Carts extends React.Component {
     }
 
     showList() {
-        console.log(this.props.navigation.goBack,'???????????????????')
         const { carts } = this.props;
         var jsx = [];
         if (carts.length > 0) {
